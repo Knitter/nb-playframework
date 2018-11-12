@@ -1,2 +1,8 @@
+# OS cache files
+.DS_Store
+._*
+Thumbs.db
+
+# Common IDE and Maven rules
 /target/
 /nb-configuration.xml
