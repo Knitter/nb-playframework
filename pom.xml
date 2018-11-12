@@ -3,41 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.qualixium</groupId>
     <artifactId>playnb</artifactId> 
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <packaging>nbm</packaging>
-    <description>
-        <![CDATA[
-<h2>Pleasure Play Framework Plugin: Develop Play Framework apps with Pleasure. </h2>
-<h5>Motivates this work with <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7FUCWX98NEUAL">
-  <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="btn_donate_SM.gif"></a></h5>
-<h5>Pull Requests and bug reports, feature/enhancement requests are very welcome!</h5>
-<h4>Most Important Features:</h4>
-<ul>
-    <li>Create, run, debug and test your app directly in the IDE using Java and/or Scala</li>
-    <li>Routes files support (Formatting, Syntax Error Hightlighting, Hints, Code completion, 
-    Hyperlink navigation, Mark occurrences, show methods code without navigate to source file)</li>
-    <li>Scala Template support (Formatting, Syntax Error Hightlighting, Code completion, 
-    Hyperlink navigation, Components palette, Mark occurrences, show class and methods code without navigate to source file)</li>
-    <li>application.conf support. (Syntax coloring, Formatting, Code Completion, Mark Occurrences, 
-    Visually edit database connections). There is support for any .conf file in a play project</li>
-    <li>Test Coverage Integration: jacoco4sbt and sbt-scoverage</li>
-    <li>Test Single File (Right-click your test file and choose "Test file").</li>
-    <li>Dependency Management (Allow search on maven, view, add and remove your dependencies without touching the build.sbt file)</li>
-    <li>SBT file minimal support (Syntax highlighting, formatting, mark occurrences, a little bit of code completion)</li>
-    <li>Configurations (Formatting indentation, syntax coloring, port to use, activator parameters, etc.)</li>
-    <li>Support play version from 2.3.x and above</li>
-</ul>
-<h4>Requirements:</h4>
-<ul>
-    <li>NetBeans 8 and above</li>
-    <li>Java 8 and above</li>
-</ul>
-<h4>Notes:</h4>
-<ul>
-    <li>For Scala support you should install the nbscala plugin by Caoyuan Deng. 
-    See: https://github.com/dcaoyuan/nbscala. Only the Scala Editor module is required</li>
-</ul>
-]]>
+    <description>Pleasure Play Framework Plugin: Develop Play Framework apps with Pleasure.
+        Requirements:
+        - NetBeans 10 and above
+        - Java 8 and above
     </description>
     <build>
         <plugins>
