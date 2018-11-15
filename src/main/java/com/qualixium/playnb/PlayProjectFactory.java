@@ -26,7 +26,7 @@ public class PlayProjectFactory implements ProjectFactory2 {
                 && projectDirectory.getFileObject(PROJECT_FILE_2) != null;
     }
 
-//Specifies when the project will be opened, i.e., if the project exists: 
+    //Specifies when the project will be opened, i.e., if the project exists: 
     @Override
     public Project loadProject(FileObject dir, ProjectState state) throws IOException {
         return isProject(dir) ? new PlayProject(dir, state) : null;
@@ -34,7 +34,7 @@ public class PlayProjectFactory implements ProjectFactory2 {
 
     @Override
     public void saveProject(final Project project) throws IOException, ClassCastException {
-// leave unimplemented for the moment 
+        // leave unimplemented for the moment 
     }
 
     @Override

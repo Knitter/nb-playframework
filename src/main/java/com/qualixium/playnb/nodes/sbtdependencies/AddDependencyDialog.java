@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.qualixium.playnb.nodes.sbtdependencies;
 
 import com.qualixium.playnb.PlayProject;
@@ -21,10 +16,6 @@ import org.openide.awt.StatusDisplayer;
 import org.openide.filesystems.FileObject;
 import org.openide.util.NbPreferences;
 
-/**
- *
- * @author pedro
- */
 public class AddDependencyDialog extends javax.swing.JDialog {
 
     /**

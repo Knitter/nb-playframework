@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.qualixium.playnb.filetype.sbt;
 
 import java.io.IOException;
@@ -21,9 +16,7 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 
-@Messages({
-    "LBL_SBT_LOADER=Files of SBT"
-})
+@Messages({"LBL_SBT_LOADER=Files of SBT"})
 @MIMEResolver.ExtensionRegistration(
         displayName = "#LBL_SBT_LOADER",
         mimeType = SBTLanguage.MIME_TYPE,

@@ -86,6 +86,7 @@ public class PlayProject implements Project {
                 new PlayProjectSources(this)
             });
         }
+
         return lkp;
     }
 
@@ -111,12 +112,12 @@ public class PlayProject implements Project {
 
         @Override
         public void addPropertyChangeListener(PropertyChangeListener pcl) {
-//do nothing, won't change 
+            //do nothing, won't change 
         }
 
         @Override
         public void removePropertyChangeListener(PropertyChangeListener pcl) {
-//do nothing, won't change 
+            //do nothing, won't change 
         }
 
         @Override
@@ -136,15 +137,16 @@ public class PlayProject implements Project {
         @Override
         public Node createLogicalView() {
             try {
-//Obtain the project directory's node: 
+                //Obtain the project directory's node: 
                 FileObject projectDirectory = project.getProjectDirectory();
                 DataFolder projectFolder = DataFolder.findFolder(projectDirectory);
                 Node nodeOfProjectFolder = projectFolder.getNodeDelegate();
-//Decorate the project directory's node: 
+
+                //Decorate the project directory's node: 
                 return new ProjectNode(nodeOfProjectFolder, project);
             } catch (DataObjectNotFoundException donfe) {
                 Exceptions.printStackTrace(donfe);
-//Fallback-the directory couldn't be created - //read-only filesystem or something evil happened 
+                //Fallback-the directory couldn't be created - //read-only filesystem or something evil happened 
                 return new AbstractNode(Children.LEAF);
             }
         }
@@ -220,6 +222,7 @@ public class PlayProject implements Project {
             if (p == null) {
                 return null;
             }
+
             // Check each child node in turn.
             Node[] children = root.getChildren().getNodes(true);
             for (Node node : children) {
@@ -273,6 +276,7 @@ public class PlayProject implements Project {
                     }
                 }
             }
+
             return null;
         }
 
@@ -280,10 +284,12 @@ public class PlayProject implements Project {
             if (obj == null) {
                 return false;
             }
+
             FileObject fileObject = node.getLookup().lookup(FileObject.class);
             if (fileObject == null) {
                 return false;
             }
+
             if (obj instanceof DataObject) {
                 DataObject dataObject = node.getLookup().lookup(DataObject.class);
                 if (dataObject == null) {
@@ -296,6 +302,7 @@ public class PlayProject implements Project {
             } else if (obj instanceof FileObject) {
                 return obj.equals(fileObject);
             }
+
             return false;
         }
 
@@ -317,8 +324,9 @@ public class PlayProject implements Project {
     public void setSbtDependenciesParentNode(SBTDependenciesParentNode sbtDependenciesParentNode) {
         this.sbtDependenciesParentNode = sbtDependenciesParentNode;
     }
-    
-    class PlayProjectSources implements Sources{
+
+    class PlayProjectSources implements Sources {
+
         final PlayProject project;
 
         public PlayProjectSources(PlayProject project) {
@@ -328,11 +336,10 @@ public class PlayProject implements Project {
         @Override
         public SourceGroup[] getSourceGroups(String type) {
             String displayName = ProjectUtils.getInformation(project).getDisplayName();
-             if (JAVA.getExtention().equals(type) || SCALA.getExtention().equals(type)) {
-                return new SourceGroup[] {
+            if (JAVA.getExtention().equals(type) || SCALA.getExtention().equals(type)) {
+                return new SourceGroup[]{
                     GenericSources.group(project, project.getProjectDirectory().getFileObject("app"), type, displayName, null, null),
-                    GenericSources.group(project, project.getProjectDirectory().getFileObject("test"), type, displayName, null, null),
-                };
+                    GenericSources.group(project, project.getProjectDirectory().getFileObject("test"), type, displayName, null, null),};
             } else {
                 return new SourceGroup[]{
                     GenericSources.group(project, project.getProjectDirectory(), type, displayName, null, null)
@@ -347,7 +354,7 @@ public class PlayProject implements Project {
         @Override
         public void removeChangeListener(ChangeListener listener) {
         }
-        
+
     }
 
 }

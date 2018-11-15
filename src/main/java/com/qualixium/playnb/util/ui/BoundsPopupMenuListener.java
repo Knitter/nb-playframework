@@ -27,16 +27,14 @@ public class BoundsPopupMenuListener implements PopupMenuListener {
     private JScrollPane scrollPane;
 
     /**
-     * Convenience constructore to allow the display of a horizontal scrollbar
-     * when required.
+     * Convenience constructor to allow the display of a horizontal scrollbar when required.
      */
     public BoundsPopupMenuListener() {
         this(true, false, -1, false);
     }
 
     /**
-     * Convenience constructor that allows you to display the popup wider and/or
-     * above the combo box.
+     * Convenience constructor that allows you to display the popup wider and/or above the combo box.
      *
      * @param popupWider when true, popup width is based on the popup preferred
      * width
@@ -68,8 +66,7 @@ public class BoundsPopupMenuListener implements PopupMenuListener {
      * @param popupAbove display the popup above the combo box
      *
      */
-    public BoundsPopupMenuListener(
-            boolean scrollBarRequired, boolean popupWider, int maximumWidth, boolean popupAbove) {
+    public BoundsPopupMenuListener(boolean scrollBarRequired, boolean popupWider, int maximumWidth, boolean popupAbove) {
         setScrollBarRequired(scrollBarRequired);
         setPopupWider(popupWider);
         setMaximumWidth(maximumWidth);

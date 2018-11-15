@@ -5,10 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-/**
- *
- * @author pedro
- */
 public abstract class GestureManager {
 
     public static final String CATEGORY_ERROR = "org.netbeans.ui.playnb.category_error";

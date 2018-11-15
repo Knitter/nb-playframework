@@ -9,10 +9,6 @@ import org.netbeans.spi.lexer.LanguageHierarchy;
 import org.netbeans.spi.lexer.Lexer;
 import org.netbeans.spi.lexer.LexerRestartInfo;
 
-/**
- *
- * @author pedro
- */
 public class SBTLanguageHierarchy extends LanguageHierarchy<SBTTokenId> {
 
     private static List<SBTTokenId> tokens;

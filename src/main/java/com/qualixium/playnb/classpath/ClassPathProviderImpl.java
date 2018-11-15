@@ -5,6 +5,7 @@ import com.qualixium.playnb.project.PlayProjectUtil;
 import com.qualixium.playnb.util.ExceptionManager;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
@@ -42,8 +43,8 @@ public class ClassPathProviderImpl implements ClassPathProvider {
 
                 return boot;
             }
-            if (ClassPath.COMPILE.equals(type)) {
 
+            if (ClassPath.COMPILE.equals(type)) {
                 if (compile == null) {
                     if (PlayProjectUtil.isActivatorExecutablePathSpecified()) {
                         reloadCompileClassPath();
@@ -54,6 +55,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
 
                 return compile;
             }
+
             if (ClassPath.SOURCE.equals(type)) {
                 if (source == null) {
                     setUpSourceClassPath();
@@ -70,6 +72,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
         if (source != null) {
             GlobalPathRegistry.getDefault().unregister(ClassPath.SOURCE, new ClassPath[]{source});
         }
+
         FileObject app = playProject.getProjectDirectory().getFileObject("app");
         FileObject test = playProject.getProjectDirectory().getFileObject("test");
 
@@ -111,8 +114,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
     }
 
     public void reloadCompileClassPath() {
-        File eclipseClassPathFile = new File(playProject.getProjectDirectory().getPath()
-                + "/.classpath");
+        File eclipseClassPathFile = new File(playProject.getProjectDirectory().getPath() + "/.classpath");
         if (!eclipseClassPathFile.exists()) {
             ClassPathUtil.executeEclipseCommand(playProject);
         }
@@ -122,7 +124,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
                 .map(jarFilePath -> {
                     try {
                         return Utilities.toURI(new File(jarFilePath)).toURL();
-                    } catch (Exception ex) {
+                    } catch (MalformedURLException ex) {
                         return null;
                     }
                 })

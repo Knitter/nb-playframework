@@ -42,7 +42,7 @@ public class ClassPathUtil {
                     Stream<String> lines = Files.lines(pluginsSBTFile.toPath());
                     boolean isSbtEclipsePluginAdded = lines
                             .anyMatch(line -> line.contains("com.typesafe.sbteclipse")
-                                    && line.contains("sbteclipse-plugin"));
+                            && line.contains("sbteclipse-plugin"));
 
                     if (!isSbtEclipsePluginAdded) {
                         final String sbtEclipsePluginStringToAdd = LINE_SEPARATOR + LINE_SEPARATOR
@@ -95,28 +95,24 @@ public class ClassPathUtil {
                     .addArgument("eclipse");
 
             processBuilderEclipseCommand = PlayProjectUtil.addJavaHomeVariable(processBuilderEclipseCommand);
-
             ExecutionService serviceEclipseCommand = ExecutionService.newService(processBuilderEclipseCommand,
-                    descriptor,
-                    "Configuring (" + playProject.getProjectName() + ") Classpath");
+                    descriptor, "Configuring (" + playProject.getProjectName() + ") Classpath");
+
             Future<Integer> eclipseCommandFuture = serviceEclipseCommand.run();
 
             eclipseCommandFuture.get(); //wait for this to finish before leave this method
         } catch (InterruptedException | ExecutionException ex) {
             ExceptionManager.logException(ex);
         }
-
     }
 
     public static List<String> getCompilePathsFromEclipseClassPathFile(PlayProject playProject) {
-        File eclipseClassPathFile = new File(playProject.getProjectDirectory().getPath()
-                + "/.classpath");
+        File eclipseClassPathFile = new File(playProject.getProjectDirectory().getPath() + "/.classpath");
 
         try {
-            String content = new String(Files.readAllBytes(
-                    Paths.get(Utilities.toURI(eclipseClassPathFile))));
-
+            String content = new String(Files.readAllBytes(Paths.get(Utilities.toURI(eclipseClassPathFile))));
             List<String> libPaths = getLibPaths(playProject, content);
+
             return libPaths;
         } catch (IOException ex) {
             ExceptionManager.logException(ex);

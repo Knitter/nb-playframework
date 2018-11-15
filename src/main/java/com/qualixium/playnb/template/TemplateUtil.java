@@ -42,6 +42,7 @@ public class TemplateUtil {
 
     public static void updateCreatedFileText(WizardDescriptor wizard, JComboBox cbxPackageName,
             JTextField txtName, JTextField txtCreatedFile, Language language) {
+
         String ext = language.equals(Language.JAVA) ? ".java" : ".scala";
         Project project = Templates.getProject(wizard);
         FileObject foTargetFolder = Templates.getTargetFolder(wizard);
@@ -87,12 +88,14 @@ public class TemplateUtil {
                 dirPath = project.getProjectDirectory().getPath() + "/test/" + packageName.replace(".", "/");
             }
         }
+
         if (dirPath != null) {
             new File(dirPath).mkdirs();
             String newPathToCreate = dirPath + "/" + className + ext;
             Files.write(Paths.get(newPathToCreate), sourceCode.getBytes(), StandardOpenOption.CREATE);
             resultSet.add(FileUtil.toFileObject(new File(newPathToCreate)));
         }
+
         return resultSet;
     }
 
@@ -101,7 +104,7 @@ public class TemplateUtil {
                 .replace(project.getProjectDirectory().getPath() + "/app", "")
                 .replace(project.getProjectDirectory().getPath() + "/test", "")
                 .replace("/", ".");
+
         return currentPackageName;
     }
-
 }

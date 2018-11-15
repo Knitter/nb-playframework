@@ -190,10 +190,10 @@ public class ScalaTemplateValidator {
                                     return true;
                                 } else {
                                     return imports.stream()
-                                            .anyMatch((anImport) -> tn.equals(anImport+"."+firstPart));
+                                            .anyMatch((anImport) -> tn.equals(anImport + "." + firstPart));
                                 }
                             });
-                            
+
                             boolean isConstructorParameter = constructorParameters.stream().anyMatch(cp -> cp.variableName.equals(firstPart));
                             Optional<TemplateParameter> blockParameterOptional = ScalaTemplateLanguageHelper.getBlockParameter(fileContent, caretPosition);
                             if (!blockParameterOptional.isPresent()
@@ -242,14 +242,14 @@ public class ScalaTemplateValidator {
     }
 
     private void setUpClassPathInfo(Document doc) {
-//        if (info == null) {//FUTURE use a better way to manage the ClassPathInfo creation
+        //FUTURE use a better way to manage the ClassPathInfo creation
         FileObject fo = MiscUtil.getFileObject(doc);
         ClassPath bootCp = ClassPath.getClassPath(fo, ClassPath.BOOT);
         ClassPath compileCp = ClassPath.getClassPath(fo, ClassPath.COMPILE);
         ClassPath sourcePath = ClassPath.getClassPath(fo, ClassPath.SOURCE);
 
+        //TODO: compileCp is null for current version
         info = ClasspathInfo.create(bootCp, compileCp, sourcePath);
-//        }
     }
 
     public static List<String> getAllExpressions(String fileContent) {

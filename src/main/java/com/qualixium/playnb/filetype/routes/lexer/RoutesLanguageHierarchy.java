@@ -10,10 +10,6 @@ import org.netbeans.spi.lexer.LanguageHierarchy;
 import org.netbeans.spi.lexer.Lexer;
 import org.netbeans.spi.lexer.LexerRestartInfo;
 
-/**
- *
- * @author pedro
- */
 public class RoutesLanguageHierarchy extends LanguageHierarchy<RoutesTokenId> {
 
     private static List<RoutesTokenId> tokens;

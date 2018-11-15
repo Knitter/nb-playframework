@@ -5,10 +5,6 @@ import com.qualixium.playnb.actions.ActionsProcessor.ActionsEnum;
 import org.netbeans.spi.project.ActionProvider;
 import org.openide.util.Lookup;
 
-/**
- *
- * @author pedro
- */
 public class PlayIDEActionProvider implements ActionProvider {
 
     private final ActionsProcessor actionsProcessor;

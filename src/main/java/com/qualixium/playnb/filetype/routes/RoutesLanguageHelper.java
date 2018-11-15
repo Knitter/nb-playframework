@@ -41,30 +41,36 @@ public class RoutesLanguageHelper {
 
         char[] chars = line.toCharArray();
         for (char ch : chars) {
-            if (workFlowEnum.equals(WorkFlowEnum.HTTP_METHOD_STARTED)) {
-                if (!Character.isWhitespace(ch)) {
-                    httpMethod.append(ch);
-                } else {
+            switch (workFlowEnum) {
+                case HTTP_METHOD_STARTED:
                     workFlowEnum = WorkFlowEnum.HTTP_METHOD_FINISHED;
-                }
-            } else if (workFlowEnum.equals(WorkFlowEnum.HTTP_METHOD_FINISHED)) {
-                if (!Character.isWhitespace(ch)) {
-                    workFlowEnum = WorkFlowEnum.URL_STARTED;
-                    url.append(ch);
-                }
-            } else if (workFlowEnum.equals(WorkFlowEnum.URL_STARTED)) {
-                if (!Character.isWhitespace(ch)) {
-                    url.append(ch);
-                } else {
+                    if (!Character.isWhitespace(ch)) {
+                        httpMethod.append(ch);
+                    }
+                    break;
+                case HTTP_METHOD_FINISHED:
+                    if (!Character.isWhitespace(ch)) {
+                        workFlowEnum = WorkFlowEnum.URL_STARTED;
+                        url.append(ch);
+                    }
+                    break;
+                case URL_STARTED:
                     workFlowEnum = WorkFlowEnum.URL_FINISHED;
-                }
-            } else if (workFlowEnum.equals(WorkFlowEnum.URL_FINISHED)) {
-                if (!Character.isWhitespace(ch)) {
-                    workFlowEnum = WorkFlowEnum.METHOD_STARTED;
+                    if (!Character.isWhitespace(ch)) {
+                        url.append(ch);
+                    }
+                    break;
+                case URL_FINISHED:
+                    if (!Character.isWhitespace(ch)) {
+                        workFlowEnum = WorkFlowEnum.METHOD_STARTED;
+                        method.append(ch);
+                    }
+                    break;
+                case METHOD_STARTED:
                     method.append(ch);
-                }
-            } else if (workFlowEnum.equals(WorkFlowEnum.METHOD_STARTED)) {
-                method.append(ch);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -104,17 +110,17 @@ public class RoutesLanguageHelper {
                             Integer maxLengthHTTPMethod = maxLengthHTTPMethodOptional.get();
                             Integer maxLenthURL = maxLengthURLOptional.get();
                             result.append(lineParsedDTO.httpMethod)
-                            .append(MiscUtil.getAmountSeparatorChars(maxLengthHTTPMethod + spaces - lineParsedDTO.httpMethod.length()))
-                            .append(lineParsedDTO.url)
-                            .append(MiscUtil.getAmountSeparatorChars(maxLenthURL + spaces - lineParsedDTO.url.length()))
-                            .append(lineParsedDTO.method);
+                                    .append(MiscUtil.getAmountSeparatorChars(maxLengthHTTPMethod + spaces - lineParsedDTO.httpMethod.length()))
+                                    .append(lineParsedDTO.url)
+                                    .append(MiscUtil.getAmountSeparatorChars(maxLenthURL + spaces - lineParsedDTO.url.length()))
+                                    .append(lineParsedDTO.method);
                         } else {
                             result.append(line);
                         }
 
                         result.append(MiscUtil.LINE_SEPARATOR);
                     });
-            
+
             return result.toString().substring(0, result.length() - 1); //substring to remove the last LINE_SEPARATOR
         }
 
@@ -214,18 +220,15 @@ public class RoutesLanguageHelper {
 
     public static String getOnlyClassNameFromCompleteMethodSignature(String completeSignatureMethod) {
         if (completeSignatureMethod.contains(".")) {
-
             String classWithMethodName = getOnlyClassAndMethodNameFromCompleteMethodSignature(completeSignatureMethod);
-
             return classWithMethodName.substring(0, classWithMethodName.lastIndexOf("."));
-        } else {
-            return "";
         }
+
+        return "";
     }
 
     public static String getOnlyMethodNameFromCompleteMethodSignature(String completeSignatureMethod) {
         String classWithMethodName = getOnlyClassAndMethodNameFromCompleteMethodSignature(completeSignatureMethod);
-
         return classWithMethodName.substring(classWithMethodName.lastIndexOf(".") + 1, classWithMethodName.length());
     }
 
@@ -240,16 +243,16 @@ public class RoutesLanguageHelper {
         List<String> listSourceFiles = new ArrayList<>();
         FileObject sourceDirFO = playProject.getProjectDirectory().getFileObject("app");
         Enumeration<? extends FileObject> childrens = sourceDirFO.getChildren(true);
-        while(childrens.hasMoreElements()){
+        while (childrens.hasMoreElements()) {
             FileObject children = childrens.nextElement();
             if (!children.isFolder()) {
                 if (children.getExt().equals("java") || children.getExt().equals("scala")) {
                     String fullClassName = children.getPath()
-                            .replace(sourceDirFO.getPath()+"/", "")
+                            .replace(sourceDirFO.getPath() + "/", "")
                             .replace("/", ".")
                             .replace(".java", "")
                             .replace(".scala", "");
-                   listSourceFiles.add(fullClassName);
+                    listSourceFiles.add(fullClassName);
                 }
             }
         }

@@ -43,8 +43,7 @@ public class HttpUtil {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.getOutputStream().write(jsonString.getBytes());
             
-            try (BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()))) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 String inputLine;
 
                 while ((inputLine = in.readLine()) != null) {

@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.qualixium.playnb.filetype.conf.lexer;
 
 import org.netbeans.api.lexer.Language;
 import org.netbeans.api.lexer.TokenId;
 
-/**
- *
- * @author pedro
- */
 public class ConfTokenId implements TokenId {
 
     private final String name;

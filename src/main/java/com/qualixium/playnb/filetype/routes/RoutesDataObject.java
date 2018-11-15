@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.qualixium.playnb.filetype.routes;
 
 import java.io.IOException;
@@ -21,13 +16,8 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 
-@Messages({
-    "LBL_Routes_LOADER=Files of Routes"
-})
-@MIMEResolver.Registration(
-        displayName = "#LBL_Routes_LOADER",
-        resource = "RoutesFileRegistration.xml"
-)
+@Messages({"LBL_Routes_LOADER=Files of Routes"})
+@MIMEResolver.Registration(displayName = "#LBL_Routes_LOADER", resource = "RoutesFileRegistration.xml")
 @MIMEResolver.ExtensionRegistration(
         displayName = "#LBL_Routes_LOADER",
         extension = {"routes"},
@@ -45,46 +35,54 @@ import org.openide.windows.TopComponent;
             id = @ActionID(category = "System", id = "org.openide.actions.OpenAction"),
             position = 100,
             separatorAfter = 200
-    ),
+    )
+    ,
     @ActionReference(
             path = "Loaders/" + RoutesLanguage.MIME_TYPE + "/Actions",
             id = @ActionID(category = "Edit", id = "org.openide.actions.CutAction"),
             position = 300
-    ),
+    )
+    ,
     @ActionReference(
             path = "Loaders/" + RoutesLanguage.MIME_TYPE + "/Actions",
             id = @ActionID(category = "Edit", id = "org.openide.actions.CopyAction"),
             position = 400,
             separatorAfter = 500
-    ),
+    )
+    ,
     @ActionReference(
             path = "Loaders/" + RoutesLanguage.MIME_TYPE + "/Actions",
             id = @ActionID(category = "Edit", id = "org.openide.actions.DeleteAction"),
             position = 600
-    ),
+    )
+    ,
     @ActionReference(
             path = "Loaders/" + RoutesLanguage.MIME_TYPE + "/Actions",
             id = @ActionID(category = "System", id = "org.openide.actions.RenameAction"),
             position = 700,
             separatorAfter = 800
-    ),
+    )
+    ,
     @ActionReference(
             path = "Loaders/" + RoutesLanguage.MIME_TYPE + "/Actions",
             id = @ActionID(category = "System", id = "org.openide.actions.SaveAsTemplateAction"),
             position = 900,
             separatorAfter = 1000
-    ),
+    )
+    ,
     @ActionReference(
             path = "Loaders/" + RoutesLanguage.MIME_TYPE + "/Actions",
             id = @ActionID(category = "System", id = "org.openide.actions.FileSystemAction"),
             position = 1100,
             separatorAfter = 1200
-    ),
+    )
+    ,
     @ActionReference(
             path = "Loaders/" + RoutesLanguage.MIME_TYPE + "/Actions",
             id = @ActionID(category = "System", id = "org.openide.actions.ToolsAction"),
             position = 1300
-    ),
+    )
+    ,
     @ActionReference(
             path = "Loaders/" + RoutesLanguage.MIME_TYPE + "/Actions",
             id = @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"),

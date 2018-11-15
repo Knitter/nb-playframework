@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.qualixium.playnb.filetype.conf;
 
 import static com.qualixium.playnb.filetype.conf.ConfLanguage.ICON_STRING_BASE;
@@ -22,9 +17,7 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 
-@Messages({
-    "LBL_Conf_LOADER=Files of Conf"
-})
+@Messages({"LBL_Conf_LOADER=Files of Conf"})
 @MIMEResolver.ExtensionRegistration(
         displayName = "#LBL_Conf_LOADER",
         mimeType = "text/x-conf",
@@ -89,6 +82,7 @@ import org.openide.windows.TopComponent;
             position = 1400
     )
 })
+
 public class ConfDataObject extends MultiDataObject {
 
     public ConfDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
