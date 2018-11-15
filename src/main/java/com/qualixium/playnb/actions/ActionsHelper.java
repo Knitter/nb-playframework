@@ -51,7 +51,7 @@ public class ActionsHelper {
                                             + "/scala-" + scalaVersionShort + "/scoverage-report/index.html";
                                     URLDisplayer.getDefault().showURL(new URL(urlIndexFile));
                                 }
-                            } catch (Exception ex) {
+                            } catch (IOException ex) {
                                 ExceptionManager.logException(ex);
                             }
                         });

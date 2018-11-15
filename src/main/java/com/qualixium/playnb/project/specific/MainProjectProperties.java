@@ -38,17 +38,18 @@ public class MainProjectProperties implements ProjectCustomizer.CompositeCategor
                 String runPort = panelMainProperties.getRunPort();
                 String debugPort = panelMainProperties.getDebugPort();
                 String parameters = panelMainProperties.getParameters();
-                
+
                 ProjectSpecificSettings settings = new ProjectSpecificSettings(project.getProjectDirectory().getPath());
                 settings.setValue(KEYS_RUN_PORT, runPort, false);
                 settings.setValue(KEYS_DEBUG_PORT, debugPort, false);
                 settings.setValue(KEYS_COMMAND_PARAMETERS, parameters, false);
-                
+
                 settings.store();
             } catch (IOException ex) {
                 ExceptionManager.logException(ex);
             }
         });
+
         return panelMainProperties;
     }
 }

@@ -16,8 +16,7 @@ public class PlayProjectFactory implements ProjectFactory2 {
 
     public static final String PROJECT_FILE_1 = "app";
     public static final String PROJECT_FILE_2 = "conf";
-    public static final ImageIcon IMAGE_ICON = new ImageIcon(
-            ImageUtilities.loadImage("com/qualixium/playnb/play_icon.png"));
+    public static final ImageIcon IMAGE_ICON = new ImageIcon(ImageUtilities.loadImage("com/qualixium/playnb/play_icon.png"));
 
     //Specifies when a project is a project, i.e., 
     @Override
@@ -29,7 +28,7 @@ public class PlayProjectFactory implements ProjectFactory2 {
     //Specifies when the project will be opened, i.e., if the project exists: 
     @Override
     public Project loadProject(FileObject dir, ProjectState state) throws IOException {
-        return isProject(dir) ? new PlayProject(dir, state) : null;
+        return isProject(dir) ? new PlayProject(dir) : null;
     }
 
     @Override
@@ -41,8 +40,8 @@ public class PlayProjectFactory implements ProjectFactory2 {
     public ProjectManager.Result isProject2(FileObject projectDirectory) {
         if (isProject(projectDirectory)) {
             return new ProjectManager.Result(IMAGE_ICON);
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

@@ -57,7 +57,7 @@ public class PlayTemplateWizardIterator implements WizardDescriptor./*Progress*/
     }
 
     @Override
-    public Set/*<FileObject>*/ instantiate(/*ProgressHandle handle*/) throws IOException {
+    public Set instantiate() throws IOException {
         Set<FileObject> resultSet = new LinkedHashSet<>();
         String activatorInstallationDir = NbPreferences.forModule(PlayPanel.class).get(ACTIVATOR_EXECUTABLE_PATH, "");
 
@@ -127,7 +127,7 @@ public class PlayTemplateWizardIterator implements WizardDescriptor./*Progress*/
             }
             if (c instanceof JComponent) { // assume Swing components
                 JComponent jc = (JComponent) c;
-                jc.putClientProperty("WizardPanel_contentSelectedIndex", new Integer(i));
+                jc.putClientProperty("WizardPanel_contentSelectedIndex", i);
                 jc.putClientProperty("WizardPanel_contentData", steps);
             }
         }
@@ -144,7 +144,7 @@ public class PlayTemplateWizardIterator implements WizardDescriptor./*Progress*/
     @Override
     public String name() {
         return MessageFormat.format("{0} of {1}",
-                new Object[]{new Integer(index + 1), new Integer(panels.length)});
+                new Object[]{index + 1, panels.length});
     }
 
     @Override

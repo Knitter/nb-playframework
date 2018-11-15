@@ -21,7 +21,6 @@ import org.netbeans.api.project.ProjectInformation;
 import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.project.Sources;
-import org.netbeans.spi.project.ProjectState;
 import org.netbeans.spi.project.support.GenericSources;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
@@ -46,18 +45,16 @@ import org.openide.util.lookup.ProxyLookup;
 public class PlayProject implements Project {
 
     private final FileObject projectDir;
-    private final ProjectState state;
-    private Lookup lkp;
+    private Lookup lookup;
     private final ClassPathProviderImpl classPathProviderImpl;
     private SBTDependenciesParentNode sbtDependenciesParentNode;
 
     public static final String PLUGIN_NAME = "Pleasure";
     public static final boolean IS_PRODUCTION = true;
 
-    PlayProject(FileObject dir, ProjectState state) {
-        this.projectDir = dir;
-        this.state = state;
-        this.classPathProviderImpl = new ClassPathProviderImpl(this);
+    PlayProject(FileObject dir) {
+        projectDir = dir;
+        classPathProviderImpl = new ClassPathProviderImpl(this);
     }
 
     @Override
@@ -75,8 +72,8 @@ public class PlayProject implements Project {
 
     @Override
     public Lookup getLookup() {
-        if (lkp == null) {
-            lkp = Lookups.fixed(new Object[]{
+        if (lookup == null) {
+            lookup = Lookups.fixed(new Object[]{
                 this,
                 new Info(),
                 new PlayProjectLogicalView(this),
@@ -87,7 +84,7 @@ public class PlayProject implements Project {
             });
         }
 
-        return lkp;
+        return lookup;
     }
 
     private final class Info implements ProjectInformation {
@@ -164,6 +161,7 @@ public class PlayProject implements Project {
                                 new Lookup[]{
                                     Lookups.singleton(project), node.getLookup()
                                 }));
+
                 this.project = project;
                 this.actionsProcessor = new ActionsProcessor(project);
             }
@@ -201,7 +199,7 @@ public class PlayProject implements Project {
 
             @Override
             public Image getIcon(int type) {
-                return ImageUtilities.loadImage(Info.PROJECT_ICON);//use static variables for all icons of the app
+                return ImageUtilities.loadImage(Info.PROJECT_ICON);
             }
 
             @Override
@@ -217,7 +215,8 @@ public class PlayProject implements Project {
 
         @Override
         public Node findPath(Node root, Object target) {
-            //This functionality was taken from org.netbeans.modules.php.project.ui.logicalview.PhpLogicalViewProvider.findPath
+            //This functionality was taken from 
+            //org.netbeans.modules.php.project.ui.logicalview.PhpLogicalViewProvider.findPath
             Project p = root.getLookup().lookup(Project.class);
             if (p == null) {
                 return null;
@@ -231,6 +230,7 @@ public class PlayProject implements Project {
                     if (kidFO == null) {
                         continue;
                     }
+
                     // Copied from org.netbeans.spi.java.project.support.ui.TreeRootNode.PathFinder.findPath:
                     FileObject targetFO;
                     if (target instanceof DataObject) {
@@ -238,13 +238,17 @@ public class PlayProject implements Project {
                     } else {
                         targetFO = (FileObject) target;
                     }
+
                     Project owner = FileOwnerQuery.getOwner(targetFO);
                     if (!p.equals(owner)) {
-                        return null; // Don't waste time if project does not own the fileobject
+                        return null;
                     }
+
                     if (kidFO == targetFO) {
                         return node;
-                    } else if (FileUtil.isParentOf(kidFO, targetFO)) {
+                    }
+
+                    if (FileUtil.isParentOf(kidFO, targetFO)) {
                         String relPath = FileUtil.getRelativePath(kidFO, targetFO);
 
                         // first path without extension (more common case)
@@ -258,13 +262,16 @@ public class PlayProject implements Project {
                             path[path.length - 1] = targetFO.getNameExt();
                             found = findNode(node, path);
                         }
+
                         if (found == null) {
                             // can happen for tests that are underneath sources directory
                             continue;
                         }
+
                         if (hasObject(found, target)) {
                             return found;
                         }
+
                         Node parent = found.getParentNode();
                         Children kids = parent.getChildren();
                         children = kids.getNodes();
@@ -295,11 +302,15 @@ public class PlayProject implements Project {
                 if (dataObject == null) {
                     return false;
                 }
+
                 if (dataObject.equals(obj)) {
                     return true;
                 }
+
                 return hasObject(node, ((DataObject) obj).getPrimaryFile());
-            } else if (obj instanceof FileObject) {
+            }
+
+            if (obj instanceof FileObject) {
                 return obj.equals(fileObject);
             }
 
@@ -307,13 +318,13 @@ public class PlayProject implements Project {
         }
 
         private Node findNode(Node start, String[] path) {
-            Node found = null;
             try {
-                found = NodeOp.findPath(start, path);
+                return NodeOp.findPath(start, path);
             } catch (NodeNotFoundException ex) {
                 // ignored
             }
-            return found;
+
+            return null;
         }
     }
 
@@ -340,11 +351,11 @@ public class PlayProject implements Project {
                 return new SourceGroup[]{
                     GenericSources.group(project, project.getProjectDirectory().getFileObject("app"), type, displayName, null, null),
                     GenericSources.group(project, project.getProjectDirectory().getFileObject("test"), type, displayName, null, null),};
-            } else {
-                return new SourceGroup[]{
-                    GenericSources.group(project, project.getProjectDirectory(), type, displayName, null, null)
-                };
             }
+
+            return new SourceGroup[]{
+                GenericSources.group(project, project.getProjectDirectory(), type, displayName, null, null)
+            };
         }
 
         @Override

@@ -3,49 +3,49 @@
 <filesystem> 
     <folder name="Editors"> 
         <folder name="text"> 
-            <folder name="x-sbt"> 
-                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.qualixium.playnb.filetype.sbt.Bundle"/> 
+            <folder name="x-sbt">
+                <attr name="displayName" bundlevalue="com.qualixium.playnb.filetype.sbt.Bundle#Editors/text/x-sbt"/>
                 <folder name="FontsColors"> 
                     <folder name="NetBeans"> 
                         <folder name="Defaults"> 
-                            <file name="SBTFontAndColors.xml" url="filetype/sbt/SBTFontAndColors.xml"> 
-                                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.qualixium.playnb.filetype.sbt.Bundle"/> 
+                            <file name="SBTFontAndColors.xml">
+                                <attr name="displayName" bundlevalue="com.qualixium.playnb.filetype.sbt.Bundle#Editors/text/x-sbt/FontsColors/NetBeans/Defaults/SBTFontAndColors.xml"/>
                             </file> 
                         </folder> 
                     </folder> 
                 </folder> 
             </folder> 
             <folder name="x-conf"> 
-                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.qualixium.playnb.filetype.conf.Bundle"/> 
+                <attr name="displayName" bundlevalue="com.qualixium.playnb.filetype.conf.Bundle#Editors/text/x-conf"/>
                 <folder name="FontsColors"> 
                     <folder name="NetBeans"> 
                         <folder name="Defaults"> 
-                            <file name="ConfFontAndColors.xml" url="filetype/conf/ConfFontAndColors.xml"> 
-                                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.qualixium.playnb.filetype.conf.Bundle"/> 
+                            <file name="ConfFontAndColors.xml">
+                                <attr name="displayName" bundlevalue="com.qualixium.playnb.filetype.conf.Bundle#Editors/text/x-conf/FontsColors/NetBeans/Defaults/ConfFontAndColors.xml"/>
                             </file> 
                         </folder> 
                     </folder> 
                 </folder> 
             </folder> 
-            <folder name="routes-file"> 
-                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.qualixium.playnb.filetype.routes.Bundle"/> 
+            <folder name="routes-file">  
+                <attr name="displayName" bundlevalue="com.qualixium.playnb.filetype.routes.Bundle#Editors/text/routes-file"/>
                 <folder name="FontsColors"> 
                     <folder name="NetBeans"> 
                         <folder name="Defaults"> 
-                            <file name="RoutesFontAndColors.xml" url="filetype/routes/RoutesFontAndColors.xml"> 
-                                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.qualixium.playnb.filetype.routes.Bundle"/> 
+                            <file name="RoutesFontAndColors.xml">
+                                <attr name="displayName" bundlevalue="com.qualixium.playnb.filetype.routes.Bundle#Editors/text/routes-file/FontsColors/NetBeans/Defaults/RoutesFontAndColors.xml"/>
                             </file> 
                         </folder> 
                     </folder> 
                 </folder> 
             </folder> 
-            <folder name="x-scala-template"> 
-                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.qualixium.playnb.filetype.scalatemplate.Bundle"/> 
+            <folder name="x-scala-template">                  
+                <attr name="displayName" bundlevalue="com.qualixium.playnb.filetype.scalatemplate.Bundle#Editors/text/x-scala-template"/>
                 <folder name="FontsColors"> 
                     <folder name="NetBeans"> 
                         <folder name="Defaults"> 
-                            <file name="ScalaTemplateFontAndColors.xml" url="filetype/scalatemplate/ScalaTemplateFontAndColors.xml"> 
-                                <attr name="SystemFileSystem.localizingBundle" stringvalue="com.qualixium.playnb.filetype.scalatemplate.Bundle"/> 
+                            <file name="ScalaTemplateFontAndColors.xml">
+                                <attr name="displayName" bundlevalue="com.qualixium.playnb.filetype.scalatemplate.Bundle#Editors/text/x-scala-template/FontsColors/NetBeans/Defaults/ScalaTemplateFontAndColors.xml"/>
                             </file> 
                         </folder> 
                     </folder> 
