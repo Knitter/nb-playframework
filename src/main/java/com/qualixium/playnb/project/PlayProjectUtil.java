@@ -7,6 +7,7 @@ import com.qualixium.playnb.util.ExceptionManager;
 import com.qualixium.playnb.util.GestureManager;
 import com.qualixium.playnb.util.MiscUtil;
 import com.qualixium.playnb.util.MiscUtil.Language;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -108,6 +109,7 @@ public class PlayProjectUtil {
         } catch (Exception ex) {
             ExceptionManager.logException(ex);
         }
+
         return Language.SCALA;
     }
 
@@ -118,9 +120,10 @@ public class PlayProjectUtil {
             String buildSBTContent = foBuildSBT.asText(PlayProjectUtil.UTF_8);
 
             return getLanguageConfigured(buildSBTContent);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             ExceptionManager.logException(ex);
         }
+
         return Language.SCALA;
     }
 
@@ -129,14 +132,17 @@ public class PlayProjectUtil {
     }
 
     public static boolean isActivatorExecutablePathSpecified() {
-        String activatorInstallationDir = NbPreferences.forModule(PlayPanel.class).get(PlayPanel.ACTIVATOR_EXECUTABLE_PATH, "");
-        return !activatorInstallationDir.trim().isEmpty();
+        /*String activatorInstallationDir = NbPreferences.forModule(PlayPanel.class).get(PlayPanel.ACTIVATOR_EXECUTABLE_PATH, "");
+        return !activatorInstallationDir.trim().isEmpty();*/
+        
+        //TODO: Implement this wit SBT
+        return true;
     }
 
     public static ExternalProcessBuilder addJavaHomeVariable(ExternalProcessBuilder processBuilder) {
         String jdkHomeValue = System.getProperty(PlayProjectUtil.JDK_HOME);
-        
-        GestureManager.registerGesture(Level.INFO, "1- jdk.home:"+jdkHomeValue, null);
+
+        GestureManager.registerGesture(Level.INFO, "1- jdk.home:" + jdkHomeValue, null);
         if (jdkHomeValue != null) {
             processBuilder = processBuilder.addEnvironmentVariable("JAVA_HOME", jdkHomeValue);
         }
