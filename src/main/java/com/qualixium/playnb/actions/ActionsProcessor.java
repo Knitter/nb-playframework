@@ -74,7 +74,6 @@ public class ActionsProcessor {
             this.keyStrokeOptional = Optional.ofNullable(keyStrokeOptional);
             this.isStandard = isStandard;
         }
-
     }
 
     public void executeAction(ActionsEnum action) {
@@ -122,24 +121,21 @@ public class ActionsProcessor {
                             descriptor, displayName);
 
                     StatusDisplayer.getDefault().setStatusText("(" + projectName + ") Executing SBT TASK: [" + commandString + "]");
-
                     service.run();
 
-                    if (action.equals(ActionsEnum.DEBUG_AUTOCOMPILE)
-                            || action.equals(ActionsEnum.DEBUG)) {
+                    if (action.equals(ActionsEnum.DEBUG_AUTOCOMPILE) || action.equals(ActionsEnum.DEBUG)) {
                         attachDebugger();
                     }
-
                 } else {
                     switch (action) {
                         case RELOAD_PROJECT:
                             playProject.getClassPathProviderImpl().reloadProject();
                             break;
                         case SBT_SCOVERAGE:
-                            ActionsHelper.runSBTSCoverage(playProject);
+                            //PENDING: ActionsHelper.runSBTSCoverage(playProject);
                             break;
                         case JACOCO4SBT:
-                            ActionsHelper.runJacoco4sbt(playProject);
+                            //PENDING: ActionsHelper.runJacoco4sbt(playProject);
                             break;
                         default:
                             break;
@@ -165,8 +161,11 @@ public class ActionsProcessor {
                     sbCommand.append(" -Dhttp.port=").append(runPortOptional.get());
                 }
                 sbCommand.append(" ").append(settings.getValue(KEYS_COMMAND_PARAMETERS).orElse(""));
+
                 return sbCommand.toString();
-            } else if (action.equals(ActionsEnum.DEBUG) || action.equals(ActionsEnum.DEBUG_AUTOCOMPILE)) {
+            }
+
+            if (action.equals(ActionsEnum.DEBUG) || action.equals(ActionsEnum.DEBUG_AUTOCOMPILE)) {
                 String debugPort = settings.getValue(KEYS_DEBUG_PORT).orElse("9999");
                 sbCommand.append(action.command.replace("${debugPort}", debugPort));
                 sbCommand.append(" -Dhttp.port=").append(settings.getValue(KEYS_RUN_PORT).orElse("9000"));
@@ -174,7 +173,6 @@ public class ActionsProcessor {
 
                 return sbCommand.toString();
             }
-
         } catch (IOException ex) {
             ExceptionManager.logException(ex);
         }
@@ -198,11 +196,11 @@ public class ActionsProcessor {
     private void closePreviousTabs(String projectName) {
         for (ActionsEnum actionEnum : ActionsEnum.values()) {
             String commandString = actionEnum.command;
-            if (!commandString.contains("run")
-                    && !commandString.contains("test")
-                    && !commandString.contains("debug")) {
+            if (!commandString.contains("run") && !commandString.contains("test") && !commandString.contains("debug")) {
                 InputOutput inputOutput = IOProvider.getDefault().getIO(
-                        getTabDisplayName(projectName, actionEnum, Optional.empty()), false);
+                        getTabDisplayName(projectName, actionEnum, Optional.empty()), false
+                );
+
                 if (inputOutput != null) {
                     inputOutput.closeInputOutput();
                 }
@@ -214,9 +212,13 @@ public class ActionsProcessor {
         String firstPart = "(" + projectName + ") ";
         if (action.equals(ActionsEnum.DEBUG)) {
             return firstPart + "Debug";
-        } else if (action.equals(ActionsEnum.DEBUG_AUTOCOMPILE)) {
+        }
+
+        if (action.equals(ActionsEnum.DEBUG_AUTOCOMPILE)) {
             return firstPart + "~Debug";
-        } else if (action.equals(ActionsEnum.TEST_ONLY) || action.equals(ActionsEnum.TEST_ONLY_AUTOCOMPILE)) {
+        }
+
+        if (action.equals(ActionsEnum.TEST_ONLY) || action.equals(ActionsEnum.TEST_ONLY_AUTOCOMPILE)) {
             if (param1Optional.isPresent()) {
                 return firstPart + action.command.replace("${param1}", param1Optional.get());
             }
@@ -240,5 +242,4 @@ public class ActionsProcessor {
 
         return newAction;
     }
-
 }

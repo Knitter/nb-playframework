@@ -5,9 +5,9 @@ import com.qualixium.playnb.project.PlayProjectUtil;
 import com.qualixium.playnb.util.ExceptionManager;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -107,31 +107,32 @@ public class ClassPathProviderImpl implements ClassPathProvider {
 
     public void reloadProject() {
         new Thread(() -> {
-            ClassPathUtil.executeEclipseCommand(playProject);
+            //DELETED: ClassPathUtil.executeEclipseCommand(playProject);
             reloadCompileClassPath();
             setUpSourceClassPath();
         }).start();
     }
 
     public void reloadCompileClassPath() {
-        File eclipseClassPathFile = new File(playProject.getProjectDirectory().getPath() + "/.classpath");
-        if (!eclipseClassPathFile.exists()) {
-            ClassPathUtil.executeEclipseCommand(playProject);
-        }
+        //File eclipseClassPathFile = new File(playProject.getProjectDirectory().getPath() + "/.classpath");
+        // if (!eclipseClassPathFile.exists()) {
+        //     ClassPathUtil.executeEclipseCommand(playProject);
+        //}
 
-        List<URL> listUrlClassPath = ClassPathUtil.getCompilePathsFromEclipseClassPathFile(playProject)
-                .stream()
-                .map(jarFilePath -> {
-                    try {
-                        return Utilities.toURI(new File(jarFilePath)).toURL();
-                    } catch (MalformedURLException ex) {
-                        return null;
-                    }
-                })
-                .filter(url -> url != null)
-                .collect(Collectors.toList());
-
+        //List<URL> listUrlClassPath = ClassPathUtil.getCompilePathsFromEclipseClassPathFile(playProject)
+        //        .stream()
+        //        .map(jarFilePath -> {
+        //            try {
+        //                return Utilities.toURI(new File(jarFilePath)).toURL();
+        //            } catch (MalformedURLException ex) {
+        //                return null;
+        //            }
+        //        })
+        //        .filter(url -> url != null)
+        //        .collect(Collectors.toList());
+        List<URL> listUrlClassPath = new ArrayList<>();
         try {
+
             Optional<String> scalaVersionOptional = PlayProjectUtil.getScalaVersion(
                     playProject.getProjectDirectory().getFileObject("build.sbt").asText(PlayProjectUtil.UTF_8));
             if (scalaVersionOptional.isPresent()) {
@@ -145,6 +146,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
                 }
             }
 
+            //TODO: Check if this is still valid
             Optional<String> ivyCacheDirOptional = ClassPathUtil.getIvyCacheDir(listUrlClassPath);
             if (ivyCacheDirOptional.isPresent()) {
                 String ivyCacheDir = ivyCacheDirOptional.get();
@@ -159,14 +161,11 @@ public class ClassPathProviderImpl implements ClassPathProvider {
                     if (urlScalaLibrary != null) {
                         listUrlClassPath.add(urlScalaLibrary);
                         classLoaderWithScalaLibrary = URLClassLoader.newInstance(
-                                new URL[]{urlScalaLibrary},
-                                getClass().getClassLoader()
+                                new URL[]{urlScalaLibrary}, getClass().getClassLoader()
                         );
                     }
                 }
-
             }
-
         } catch (IOException ex) {
             ExceptionManager.logException(ex);
         }
@@ -175,9 +174,9 @@ public class ClassPathProviderImpl implements ClassPathProvider {
                 .map(urlClassPath -> {
                     if (FileUtil.isArchiveFile(urlClassPath)) {
                         return FileUtil.getArchiveRoot(urlClassPath);
-                    } else {
-                        return urlClassPath;
                     }
+
+                    return urlClassPath;
                 })
                 .collect(Collectors.toList());
 
@@ -185,6 +184,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
             try {
                 GlobalPathRegistry.getDefault().unregister(ClassPath.COMPILE, new ClassPath[]{compile});
             } catch (IllegalArgumentException ex) {
+                //TODO: LOG!
             }
         }
 

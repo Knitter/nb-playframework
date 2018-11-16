@@ -29,16 +29,13 @@ public class RoutesValidator {
             lines.stream()
                     .map(line -> line.trim())
                     .filter(line -> !line.isEmpty()
-                            && !line.startsWith(RoutesLanguageHelper.COMMENT_SYMBOL))
+                    && !line.startsWith(RoutesLanguageHelper.COMMENT_SYMBOL))
                     .forEach(line -> {
                         RoutesLineParsedDTO lineParsedDTO = RoutesLanguageHelper.divideLineInColumns(line);
 
                         if (lineParsedDTO.isCorrect()) {
-
                             listErrors.addAll(validateHttpMethod(fileContent, line, lineParsedDTO.httpMethod));
-
                             listErrors.addAll(validateURL(fileContent, line, lineParsedDTO.url));
-//
                             listErrors.addAll(validateMethod(document, line, lineParsedDTO.method));
 
                         } else {
@@ -50,12 +47,12 @@ public class RoutesValidator {
 
                             listErrors.add(error);
                         }
-
                     });
 
         } catch (BadLocationException ex) {
             ExceptionManager.logException(ex);
         }
+
         return listErrors;
     }
 
@@ -108,6 +105,8 @@ public class RoutesValidator {
                     methodExists = listMethods.stream()
                             .anyMatch(declaredMethod -> declaredMethod.getName().equals(methodName));
                 } catch (ClassNotFoundException ex) {
+                    //TODO: NEW LOG; CHECK IF VALID
+                    ExceptionManager.logException(ex);
                 }
             }
 

@@ -20,13 +20,13 @@ import org.openide.filesystems.FileObject;
 
 public class ActionsHelper {
 
-    public static void runSBTSCoverage(PlayProject playProject) {
+    public static void runSBTSCoveragePENDING(PlayProject playProject) {
         try {
             if (PlayProjectUtil.isActivatorExecutablePathSpecified()) {
 
                 FileObject pluginsSBTFO = playProject.getProjectDirectory().getFileObject("project/plugins.sbt");
                 String pluginsSBTContent = pluginsSBTFO.asText(PlayProjectUtil.UTF_8);
-                String newFileContent = getNewContentWithSBTCoverageAdded(pluginsSBTContent);
+                String newFileContent = getNewContentWithSBTCoverageAddedPENDING(pluginsSBTContent);
 
                 if (!pluginsSBTContent.equals(newFileContent)) {
                     Files.write(Paths.get(pluginsSBTFO.toURI()), newFileContent.getBytes());
@@ -42,7 +42,7 @@ public class ActionsHelper {
                             try {
                                 Optional<String> scalaVersionDirtyOptional = PlayProjectUtil.getScalaVersion(
                                         playProject.getProjectDirectory().getFileObject("build.sbt")
-                                        .asText(PlayProjectUtil.UTF_8));
+                                                .asText(PlayProjectUtil.UTF_8));
                                 if (scalaVersionDirtyOptional.isPresent()) {
 
                                     String scalaVersionShort = scalaVersionDirtyOptional.get().substring(0, 4);
@@ -81,12 +81,12 @@ public class ActionsHelper {
         }
     }
 
-    public static void runJacoco4sbt(PlayProject playProject) {
+    public static void runJacoco4sbtPENDING(PlayProject playProject) {
         try {
             if (PlayProjectUtil.isActivatorExecutablePathSpecified()) {
                 FileObject pluginsSBTFO = playProject.getProjectDirectory().getFileObject("project/plugins.sbt");
                 String pluginsSBTContent = pluginsSBTFO.asText(PlayProjectUtil.UTF_8);
-                String newPluginsSBTFileContent = getNewContentWithJaCoCo4SBTAdded(pluginsSBTContent);
+                String newPluginsSBTFileContent = getNewContentWithJaCoCo4SBTAddedPENDING(pluginsSBTContent);
 
                 if (!pluginsSBTContent.equals(newPluginsSBTFileContent)) {
                     Files.write(Paths.get(pluginsSBTFO.toURI()), newPluginsSBTFileContent.getBytes());
@@ -94,7 +94,7 @@ public class ActionsHelper {
 
                 final FileObject fileObjectBuildSBT = playProject.getProjectDirectory().getFileObject("build.sbt");
                 String buildSBTContent = fileObjectBuildSBT.asText(PlayProjectUtil.UTF_8);
-                String newContentJaCoCoConfigurationsAdded = getNewContentJaCoCoConfigurationsAdded(buildSBTContent);
+                String newContentJaCoCoConfigurationsAdded = getNewContentJaCoCoConfigurationsAddedPENDING(buildSBTContent);
 
                 if (!buildSBTContent.equals(newContentJaCoCoConfigurationsAdded)) {
                     Files.write(Paths.get(fileObjectBuildSBT.toURI()), newContentJaCoCoConfigurationsAdded.getBytes());
@@ -118,7 +118,7 @@ public class ActionsHelper {
                                             + "/scala-" + scalaVersionShort + "/jacoco/html/index.html";
                                     URLDisplayer.getDefault().showURL(new URL(urlIndexFile));
                                 }
-                            } catch (Exception ex) {
+                            } catch (IOException ex) {
                                 ExceptionManager.logException(ex);
                             }
                         });
@@ -145,19 +145,16 @@ public class ActionsHelper {
         }
     }
 
-    public static String getNewContentWithSBTCoverageAdded(String pluginsSBTContent) {
-
+    public static String getNewContentWithSBTCoverageAddedPENDING(String pluginsSBTContent) {
         if (pluginsSBTContent.contains("org.scoverage") && pluginsSBTContent.contains("sbt-scoverage")) {
             return pluginsSBTContent;
         } else {
             String sbtCoverageDepString = "addSbtPlugin(\"org.scoverage\" % \"sbt-scoverage\" % \"1.3.3\")";
             return pluginsSBTContent + MiscUtil.LINE_SEPARATOR + sbtCoverageDepString;
         }
-
     }
 
-    public static String getNewContentWithJaCoCo4SBTAdded(String pluginsSBTContent) {
-
+    public static String getNewContentWithJaCoCo4SBTAddedPENDING(String pluginsSBTContent) {
         if (pluginsSBTContent.contains("de.johoop") && pluginsSBTContent.contains("jacoco4sbt")) {
             return pluginsSBTContent;
         } else {
@@ -166,7 +163,7 @@ public class ActionsHelper {
         }
     }
 
-    public static String getNewContentJaCoCoConfigurationsAdded(String buildSBTContent) {
+    public static String getNewContentJaCoCoConfigurationsAddedPENDING(String buildSBTContent) {
         StringBuilder result = new StringBuilder(buildSBTContent);
         if (!buildSBTContent.contains("jacoco.settings")) {
             result.append(MiscUtil.LINE_SEPARATOR).append(MiscUtil.LINE_SEPARATOR)

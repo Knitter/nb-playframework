@@ -10,7 +10,7 @@ public class PlayIDEActionProvider implements ActionProvider {
     private final ActionsProcessor actionsProcessor;
 
     public PlayIDEActionProvider(PlayProject playProject) {
-        this.actionsProcessor = new ActionsProcessor(playProject);
+        actionsProcessor = new ActionsProcessor(playProject);
     }
 
     @Override

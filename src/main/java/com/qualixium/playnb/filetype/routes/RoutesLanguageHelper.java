@@ -74,11 +74,7 @@ public class RoutesLanguageHelper {
             }
         }
 
-        RoutesLineParsedDTO dto = new RoutesLineParsedDTO(httpMethod.toString(),
-                url.toString(), method.toString());
-
-        return dto;
-
+        return new RoutesLineParsedDTO(httpMethod.toString(), url.toString(), method.toString());
     }
 
     public static String formatFile(String fileContent, int spaces) {

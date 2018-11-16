@@ -28,7 +28,7 @@ import org.openide.util.Utilities;
 
 public class ClassPathUtil {
 
-    private static void addEclipseSBTPluginIfNeeded(PlayProject playProject) {
+    private static void addEclipseSBTPluginIfNeededDELETED(PlayProject playProject) {
         try {
             FileObject foPluginsSBTFile = playProject.getProjectDirectory().getFileObject("project/plugins.sbt");
             Optional<String> playVersionOptional = PlayProjectUtil.getPlayVersion(foPluginsSBTFile.asText());
@@ -79,12 +79,11 @@ public class ClassPathUtil {
         } catch (IOException ex) {
             ExceptionManager.logException(ex);
         }
+    } 
 
-    }
-
-    public static void executeEclipseCommand(PlayProject playProject) {
+    public static void executeEclipseCommandDELETED(PlayProject playProject) {
         try {
-            addEclipseSBTPluginIfNeeded(playProject);
+            //DELETED: addEclipseSBTPluginIfNeeded(playProject);
             ExecutionDescriptor descriptor = new ExecutionDescriptor()
                     .frontWindow(true)
                     .inputVisible(true)
@@ -106,7 +105,7 @@ public class ClassPathUtil {
         }
     }
 
-    public static List<String> getCompilePathsFromEclipseClassPathFile(PlayProject playProject) {
+    public static List<String> getCompilePathsFromEclipseClassPathFileDELETED(PlayProject playProject) {
         File eclipseClassPathFile = new File(playProject.getProjectDirectory().getPath() + "/.classpath");
 
         try {

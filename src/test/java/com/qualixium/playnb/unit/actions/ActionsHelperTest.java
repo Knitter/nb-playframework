@@ -47,7 +47,7 @@ public class ActionsHelperTest {
                 + LINE_SEPARATOR
                 + "addSbtPlugin(\"org.scoverage\" % \"sbt-scoverage\" % \"1.3.3\")";
 
-        String actual = ActionsHelper.getNewContentWithSBTCoverageAdded(pluginsSBTContent);
+        String actual = ActionsHelper.getNewContentWithSBTCoverageAddedPENDING(pluginsSBTContent);
 
         assertEquals(expected, actual);
     }
@@ -102,7 +102,7 @@ public class ActionsHelperTest {
                 + LINE_SEPARATOR
                 + "parallelExecution in jacoco.Config := false";
 
-        String actual = ActionsHelper.getNewContentJaCoCoConfigurationsAdded(buildSBTContent);
+        String actual = ActionsHelper.getNewContentJaCoCoConfigurationsAddedPENDING(buildSBTContent);
 
         assertEquals(expected, actual);
     }

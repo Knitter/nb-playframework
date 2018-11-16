@@ -13,11 +13,7 @@ public class RoutesLineParsedDTO {
     }
 
     public boolean isCorrect() {
-        if (httpMethod.isEmpty() || url.isEmpty() || method.isEmpty()) {
-            return false;
-        }
-
-        return true;
+        return !(httpMethod.isEmpty() || url.isEmpty() || method.isEmpty());
     }
 
     public static RoutesLineParsedDTO getNewEmptyDTO() {
