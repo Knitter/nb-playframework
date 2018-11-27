@@ -1,7 +1,6 @@
 package com.qualixium.playnb.codegenerator;
 
 import com.qualixium.playnb.util.MiscUtil;
-import java.util.Arrays;
 import java.util.List;
 
 public class CodeGeneratorHelper {
@@ -10,8 +9,10 @@ public class CodeGeneratorHelper {
 
     public static String getCodeNewMethodScala(String methodName) {
         StringBuilder sbResult = new StringBuilder();
-
-        sbResult.append("def ").append(methodName).append(" = TODO").append(MiscUtil.LINE_SEPARATOR);
+        sbResult.append("def ")
+                .append(methodName)
+                .append(" = TODO")
+                .append(MiscUtil.LINE_SEPARATOR);
 
         return applySpaces(sbResult.toString());
     }
@@ -19,8 +20,12 @@ public class CodeGeneratorHelper {
     public static String getCodeNewMethodJava(String methodName) {
         StringBuilder sbResult = new StringBuilder();
 
-        sbResult.append("public Result ").append(methodName).append("() {").append(MiscUtil.LINE_SEPARATOR)
-                .append(TAB_SPACES).append("return play.mvc.Results.TODO;").append(MiscUtil.LINE_SEPARATOR)
+        sbResult.append("public Result ")
+                .append(methodName)
+                .append("() {")
+                .append(MiscUtil.LINE_SEPARATOR)
+                .append(TAB_SPACES).append("return play.mvc.Results.TODO;")
+                .append(MiscUtil.LINE_SEPARATOR)
                 .append("}");
 
         return applySpaces(sbResult.toString());

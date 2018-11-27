@@ -134,8 +134,8 @@ public class PlayProjectUtil {
     public static boolean isActivatorExecutablePathSpecified() {
         /*String activatorInstallationDir = NbPreferences.forModule(PlayPanel.class).get(PlayPanel.ACTIVATOR_EXECUTABLE_PATH, "");
         return !activatorInstallationDir.trim().isEmpty();*/
-        
-        //TODO: Implement this wit SBT
+
+        //TODO: Implement this with SBT
         return true;
     }
 

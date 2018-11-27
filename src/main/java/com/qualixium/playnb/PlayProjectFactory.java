@@ -18,7 +18,6 @@ public class PlayProjectFactory implements ProjectFactory2 {
     public static final String PROJECT_FILE_2 = "conf";
     public static final ImageIcon IMAGE_ICON = new ImageIcon(ImageUtilities.loadImage("com/qualixium/playnb/play_icon.png"));
 
-    //Specifies when a project is a project, i.e., 
     @Override
     public boolean isProject(FileObject projectDirectory) {
         return projectDirectory.getFileObject(PROJECT_FILE_1) != null

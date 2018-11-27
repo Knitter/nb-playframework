@@ -31,7 +31,7 @@ public class MiscUtil {
     public enum Language {
 
         JAVA("java"), SCALA("scala");
-        
+
         /**
          * Extension without the period at the beginning
          */
@@ -52,11 +52,13 @@ public class MiscUtil {
     public static final Comparator<FileObject> FILE_OBJECT_COMPARATOR = (FileObject f1, FileObject f2) -> {
         if (f1.isFolder() && !f2.isFolder()) {
             return -1;
-        } else if (!f1.isFolder() && f2.isFolder()) {
-            return 1;
-        } else {
-            return f1.getName().toLowerCase().compareTo(f2.getName().toLowerCase());
         }
+
+        if (!f1.isFolder() && f2.isFolder()) {
+            return 1;
+        }
+
+        return f1.getName().toLowerCase().compareTo(f2.getName().toLowerCase());
     };
 
     public static final Predicate<? super ElementHandle<TypeElement>> CLASSPATH_TYPE_ELEMENT_FILTER

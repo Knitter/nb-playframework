@@ -57,7 +57,6 @@ public class PlayProjectNodeFactory implements NodeFactory {
                             }
                         })
                         .collect(Collectors.toList()));
-
             }
 
             SBTDependenciesParentNode sbtDependenciesParentNode = new SBTDependenciesParentNode(project);
