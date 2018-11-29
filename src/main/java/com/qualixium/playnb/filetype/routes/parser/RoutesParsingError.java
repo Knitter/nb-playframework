@@ -7,30 +7,21 @@ import org.openide.filesystems.FileObject;
 
 public class RoutesParsingError implements Error {
 
-    private final RoutesErrorEnum errorEnum;
+    private final RoutesErrorType errorType;
     private final Severity severity;
     private final int startPosition;
     private final int endPosition;
 
-    private RoutesParsingError(RoutesErrorEnum errorEnum, Severity severity,
-            int startPostion, int endPosition) {
-        this.errorEnum = errorEnum;
+    public RoutesParsingError(RoutesErrorType errorType, Severity severity, int startPostion, int endPosition) {
+        this.errorType = errorType;
         this.severity = severity;
         this.startPosition = startPostion;
         this.endPosition = endPosition;
     }
 
-    public static RoutesParsingError getNewError(RoutesErrorEnum errorEnum,
-            int startPosition, int endPosition, Severity severity) {
-        RoutesParsingError error = new RoutesParsingError(
-                errorEnum, severity, startPosition, endPosition);
-
-        return error;
-    }
-
     @Override
     public String getDisplayName() {
-        return errorEnum.description;
+        return errorType.description;
     }
 
     @Override
@@ -40,12 +31,12 @@ public class RoutesParsingError implements Error {
 
     @Override
     public String getKey() {
-        return errorEnum.name();
+        return errorType.name();
     }
 
     @Override
     public FileObject getFile() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -73,12 +64,13 @@ public class RoutesParsingError implements Error {
         return null;
     }
 
-    public RoutesErrorEnum getErrorEnum() {
-        return errorEnum;
+    public RoutesErrorType getErrorEnum() {
+        return errorType;
     }
 
-    public enum RoutesErrorEnum {
+    public enum RoutesErrorType {
 
+        //TODO: Simplify this enum, make errors clearer
         BAD_LINE("This line is not compose of 3 parts (httpMethod, url, classMethod)"),
         HTTP_METHOD_ERROR("This is not an HTTP Method in Uppercase"),
         URL_START_INCORRECT_ERROR("An url should start with: " + RoutesLanguageHelper.URL_START_SYMBOL),
@@ -87,7 +79,7 @@ public class RoutesParsingError implements Error {
 
         public final String description;
 
-        private RoutesErrorEnum(String description) {
+        private RoutesErrorType(String description) {
             this.description = description;
         }
     }

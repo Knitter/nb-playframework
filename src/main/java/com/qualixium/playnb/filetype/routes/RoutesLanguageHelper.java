@@ -16,19 +16,18 @@ public class RoutesLanguageHelper {
     public static final String COMMENT_SYMBOL = "#";
     public static final String URL_START_SYMBOL = "/";
 
-    public static List<String> getHttpMethods() {
-        List<String> listHttpMethods = new ArrayList<>();
-        listHttpMethods.add("GET");
-        listHttpMethods.add("HEAD");
-        listHttpMethods.add("POST");
-        listHttpMethods.add("PUT");
-        listHttpMethods.add("DELETE");
-        listHttpMethods.add("TRACE");
-        listHttpMethods.add("OPTIONS");
-        listHttpMethods.add("CONNECT");
-        listHttpMethods.add("PATCH");
+    public static List<String> getHTTPVerbs() {
+        List<String> verbs = new ArrayList<>();
+               
+        verbs.add("GET");
+        verbs.add("HEAD");
+        verbs.add("POST");
+        verbs.add("PUT");
+        verbs.add("DELETE");
+        verbs.add("OPTIONS");
+        verbs.add("PATCH");
 
-        return listHttpMethods;
+        return verbs;
     }
 
     public static RoutesLineParsedDTO divideLineInColumns(String line) {
@@ -86,7 +85,7 @@ public class RoutesLanguageHelper {
                     if (lineIsEnableToFormat(line)) {
                         RoutesLineParsedDTO lineParsedDTO = divideLineInColumns(line);
                         if (lineParsedDTO.isCorrect()) {
-                            return lineParsedDTO.httpMethod.length();
+                            return lineParsedDTO.getVerb().length();
                         }
                     }
 
@@ -105,11 +104,11 @@ public class RoutesLanguageHelper {
                         if (lineIsEnableToFormat(line) && lineParsedDTO.isCorrect()) {
                             Integer maxLengthHTTPMethod = maxLengthHTTPMethodOptional.get();
                             Integer maxLenthURL = maxLengthURLOptional.get();
-                            result.append(lineParsedDTO.httpMethod)
-                                    .append(MiscUtil.getAmountSeparatorChars(maxLengthHTTPMethod + spaces - lineParsedDTO.httpMethod.length()))
-                                    .append(lineParsedDTO.url)
-                                    .append(MiscUtil.getAmountSeparatorChars(maxLenthURL + spaces - lineParsedDTO.url.length()))
-                                    .append(lineParsedDTO.method);
+                            result.append(lineParsedDTO.getVerb())
+                                    .append(MiscUtil.getAmountSeparatorChars(maxLengthHTTPMethod + spaces - lineParsedDTO.getVerb().length()))
+                                    .append(lineParsedDTO.getUrl())
+                                    .append(MiscUtil.getAmountSeparatorChars(maxLenthURL + spaces - lineParsedDTO.getUrl().length()))
+                                    .append(lineParsedDTO.getMethod());
                         } else {
                             result.append(line);
                         }
@@ -154,7 +153,7 @@ public class RoutesLanguageHelper {
                     if (lineIsEnableToFormat(line)) {
                         RoutesLineParsedDTO lineParsedDTO = divideLineInColumns(line);
                         if (lineParsedDTO.isCorrect()) {
-                            return lineParsedDTO.url;
+                            return lineParsedDTO.getUrl();
                         }
                     }
 
@@ -174,7 +173,7 @@ public class RoutesLanguageHelper {
                     if (lineIsEnableToFormat(line)) {
                         RoutesLineParsedDTO lineParsedDTO = divideLineInColumns(line);
                         if (lineParsedDTO.isCorrect()) {
-                            return lineParsedDTO.method;
+                            return lineParsedDTO.getMethod();
                         }
                     }
 

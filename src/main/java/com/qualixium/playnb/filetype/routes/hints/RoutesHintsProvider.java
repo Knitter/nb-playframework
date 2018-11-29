@@ -1,6 +1,6 @@
 package com.qualixium.playnb.filetype.routes.hints;
 
-import com.qualixium.playnb.filetype.routes.parser.RoutesParsingError.RoutesErrorEnum;
+import com.qualixium.playnb.filetype.routes.parser.RoutesParsingError.RoutesErrorType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +52,7 @@ public class RoutesHintsProvider implements HintsProvider {
 
         listErrors.stream().forEach(error -> {
 
-            if (RoutesErrorEnum.METHOD_DOES_NOT_EXISTS.name().equals(error.getKey())) {
+            if (RoutesErrorType.METHOD_DOES_NOT_EXISTS.name().equals(error.getKey())) {
                 createMethodHintFix(ctx, hints, error);
             }
 

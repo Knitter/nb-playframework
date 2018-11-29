@@ -34,9 +34,9 @@ public class RoutesFormattingUnitTest {
         listLines.stream().forEach(lineFormatted -> {
             RoutesLineParsedDTO lineParsedDTO = RoutesLanguageHelper.divideLineInColumns(lineFormatted);
             if (lineParsedDTO.isCorrect()) {
-                int httpMethodLocation = lineFormatted.indexOf(lineParsedDTO.httpMethod);
-                int urlLocation = lineFormatted.indexOf(lineParsedDTO.url);
-                assertTrue(spacesBetweenParts >= urlLocation - (httpMethodLocation + lineParsedDTO.httpMethod.length()));
+                int httpMethodLocation = lineFormatted.indexOf(lineParsedDTO.getVerb());
+                int urlLocation = lineFormatted.indexOf(lineParsedDTO.getUrl());
+                assertTrue(spacesBetweenParts >= urlLocation - (httpMethodLocation + lineParsedDTO.getVerb().length()));
             }
         });
     }

@@ -12,6 +12,9 @@ import org.netbeans.modules.parsing.spi.ParseException;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 
+/**
+ * Implements parser object for "routes" file.
+ */
 public class RoutesParser extends Parser {
 
     private Snapshot snapshot;
@@ -30,9 +33,9 @@ public class RoutesParser extends Parser {
                 Document document = snapshot.getSource().getDocument(false);
                 if (document != null) {
                     return RoutesValidator.validateFile(document);
-                } else {
-                    return Collections.EMPTY_LIST;
                 }
+
+                return Collections.EMPTY_LIST;
             }
 
             @Override

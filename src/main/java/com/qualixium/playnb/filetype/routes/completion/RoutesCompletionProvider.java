@@ -43,7 +43,7 @@ public class RoutesCompletionProvider implements CompletionProvider {
 
             @Override
             protected void query(CompletionResultSet crs, Document dcmnt, int caretOffset) {
-                String filter = null;
+                String filter;
                 int startOffset = caretOffset - 1;
                 String lineUntilcaret = null;
                 try {
@@ -65,21 +65,22 @@ public class RoutesCompletionProvider implements CompletionProvider {
                     if (RoutesLanguageHelper.lineIsEnableToAutoComplete(lineUntilcaret)) {
                         RoutesLineParsedDTO lineParsedDTO = RoutesLanguageHelper.divideLineInColumns(lineUntilcaret);
                         if (lineUntilcaret.trim().isEmpty()
-                                || (!lineParsedDTO.httpMethod.isEmpty()
-                                && !RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret, lineParsedDTO.httpMethod.length()))) {
+                                || (!lineParsedDTO.getVerb().isEmpty()
+                                && !RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret, lineParsedDTO.getVerb().length()))) {
 
                             resolveHTTPMethodCompletion(filter, crs, startOffset, caretOffset);
-                        } else if ((!lineParsedDTO.httpMethod.isEmpty()
-                                && RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret, lineParsedDTO.httpMethod.length())
-                                && lineParsedDTO.url.isEmpty())
-                                || (!lineParsedDTO.url.isEmpty()
+                        } else if ((!lineParsedDTO.getVerb().isEmpty()
+                                && RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret, lineParsedDTO.getVerb().length())
+                                && lineParsedDTO.getUrl().isEmpty())
+                                || (!lineParsedDTO.getUrl().isEmpty()
                                 && !RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret,
-                                        lineUntilcaret.indexOf(lineParsedDTO.url) + lineParsedDTO.url.length()))) {
+                                        lineUntilcaret.indexOf(lineParsedDTO.getUrl()) + lineParsedDTO.getUrl().length()))) {
 
                             resolveURLCompletion(fileContent, filter, crs, startOffset, caretOffset);
 
-                        } else if (!lineParsedDTO.method.isEmpty()
-                                && lineParsedDTO.method.substring(0, lineParsedDTO.method.lastIndexOf(".") == -1 ? 0 : lineParsedDTO.method.lastIndexOf("."))
+                        } else if (!lineParsedDTO.getMethod().isEmpty()
+                                && lineParsedDTO.getMethod()
+                                        .substring(0, lineParsedDTO.getMethod().lastIndexOf(".") == -1 ? 0 : lineParsedDTO.getMethod().lastIndexOf("."))
                                         .chars().anyMatch(ch -> Character.isUpperCase(ch))) {
 
                             resolveMethodCompletion(lineParsedDTO, dcmnt, crs, startOffset, caretOffset);
@@ -119,9 +120,9 @@ public class RoutesCompletionProvider implements CompletionProvider {
             private void resolveMethodCompletion(RoutesLineParsedDTO lineParsedDTO, Document dcmnt,
                     CompletionResultSet crs, int startOffset, int caretOffset)
                     throws IOException, SecurityException, ClassNotFoundException {
-                int lastDOTIndex = lineParsedDTO.method.lastIndexOf(".");
-                String className = lineParsedDTO.method.substring(0, lastDOTIndex);
-                final String filterForMethod = lineParsedDTO.method.substring(lastDOTIndex + 1, lineParsedDTO.method.length());
+                int lastDOTIndex = lineParsedDTO.getMethod().lastIndexOf(".");
+                String className = lineParsedDTO.getMethod().substring(0, lastDOTIndex);
+                final String filterForMethod = lineParsedDTO.getMethod().substring(lastDOTIndex + 1, lineParsedDTO.getMethod().length());
 
                 FileObject fo = MiscUtil.getFileObject(dcmnt);
                 ClassPath compileCp = ClassPath.getClassPath(fo, ClassPath.COMPILE);
@@ -158,7 +159,7 @@ public class RoutesCompletionProvider implements CompletionProvider {
             }
 
             private void resolveHTTPMethodCompletion(String filter, CompletionResultSet crs, int startOffset, int caretOffset) {
-                RoutesLanguageHelper.getHttpMethods().stream()
+                RoutesLanguageHelper.getHTTPVerbs().stream()
                         .filter((httpMethod) -> (httpMethod.toLowerCase().startsWith(filter.toLowerCase())))
                         .forEach((httpMethod) -> {
                             crs.addItem(new RoutesHTTPMethodCompletionItem(httpMethod, startOffset, caretOffset));
@@ -170,13 +171,12 @@ public class RoutesCompletionProvider implements CompletionProvider {
     @Override
     public int getAutoQueryTypes(JTextComponent jtc, String string) {
         return 0;
-
     }
 
     static int getRowFirstNonArroba(StyledDocument doc, int offset) throws BadLocationException {
-        Element lineElement = doc.getParagraphElement(offset);
-        int start = lineElement.getStartOffset();
-        while (start + 1 < lineElement.getEndOffset()) {
+        Element element = doc.getParagraphElement(offset);
+        int start = element.getStartOffset();
+        while (start + 1 < element.getEndOffset()) {
             try {
                 if (doc.getText(start, 1).charAt(0) != CHAR_TO_START_COMPLETION) {
                     break;
@@ -190,9 +190,10 @@ public class RoutesCompletionProvider implements CompletionProvider {
     }
 
     static int indexOfChartToStartCompletion(char[] line) {
+        char c;
         int i = line.length;
         while (--i > -1) {
-            final char c = line[i];
+            c = line[i];
             if (c == CHAR_TO_START_COMPLETION) {
                 return i;
             }

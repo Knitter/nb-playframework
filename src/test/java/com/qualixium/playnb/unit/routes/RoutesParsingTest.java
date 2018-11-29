@@ -1,7 +1,7 @@
 package com.qualixium.playnb.unit.routes;
 
 import com.qualixium.playnb.filetype.routes.parser.RoutesParsingError;
-import com.qualixium.playnb.filetype.routes.parser.RoutesParsingError.RoutesErrorEnum;
+import com.qualixium.playnb.filetype.routes.parser.RoutesParsingError.RoutesErrorType;
 import com.qualixium.playnb.filetype.routes.parser.RoutesValidator;
 import java.io.IOException;
 import java.net.URI;
@@ -40,7 +40,7 @@ public class RoutesParsingTest {
         List<RoutesParsingError> listErrors = RoutesValidator.validateHttpMethod(goodRoutesFileContent, "", httpMethod);
 
         boolean containsHttpMethodError = listErrors.stream()
-                .anyMatch(error -> error.getDisplayName().equals(RoutesErrorEnum.HTTP_METHOD_ERROR.description));
+                .anyMatch(error -> error.getDisplayName().equals(RoutesErrorType.HTTP_METHOD_ERROR.description));
 
         assertTrue(containsHttpMethodError);
     }
@@ -61,7 +61,7 @@ public class RoutesParsingTest {
         List<RoutesParsingError> listErrors = RoutesValidator.validateURL(goodRoutesFileContent, "", url);
 
         boolean containsError = listErrors.stream()
-                .anyMatch(error -> error.getDisplayName().equals(RoutesErrorEnum.URL_START_INCORRECT_ERROR.description));
+                .anyMatch(error -> error.getDisplayName().equals(RoutesErrorType.URL_START_INCORRECT_ERROR.description));
 
         assertTrue(containsError);
     }
@@ -73,7 +73,7 @@ public class RoutesParsingTest {
         Optional<RoutesParsingError> errorOptional = RoutesValidator.validateMethodStartWithInvalidCharacter(goodRoutesFileContent, "", method);
 
         assertTrue(errorOptional.isPresent());
-        assertEquals(RoutesErrorEnum.METHOD_START_WITH_INVALID_CHAR.description, errorOptional.get().getDisplayName());
+        assertEquals(RoutesErrorType.METHOD_START_WITH_INVALID_CHAR.description, errorOptional.get().getDisplayName());
     }
 
     @Test

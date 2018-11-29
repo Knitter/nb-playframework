@@ -14,31 +14,37 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ProjectFactory.class, position = -1000)
 public class PlayProjectFactory implements ProjectFactory2 {
 
-    public static final String PROJECT_FILE_1 = "app";
-    public static final String PROJECT_FILE_2 = "conf";
-    public static final ImageIcon IMAGE_ICON = new ImageIcon(ImageUtilities.loadImage("com/qualixium/playnb/play_icon.png"));
+    private static final String APP_FOLDER = "app";
+    private static final String BUILD_SBT_FILE = "build.sbt";
 
+    private static final ImageIcon PROJECT_ICON = new ImageIcon(ImageUtilities.loadImage("com/qualixium/playnb/play_icon.png"));
+
+    /**
+     * Checks if the given directory object contains the required files to be considered an Play project.
+     *
+     * @param directoryObj
+     * @return
+     */
     @Override
-    public boolean isProject(FileObject projectDirectory) {
-        return projectDirectory.getFileObject(PROJECT_FILE_1) != null
-                && projectDirectory.getFileObject(PROJECT_FILE_2) != null;
+    public boolean isProject(FileObject directoryObj) {
+        return directoryObj.getFileObject(APP_FOLDER) != null && directoryObj.getFileObject(BUILD_SBT_FILE) != null;
     }
 
     //Specifies when the project will be opened, i.e., if the project exists: 
     @Override
-    public Project loadProject(FileObject dir, ProjectState state) throws IOException {
-        return isProject(dir) ? new PlayProject(dir) : null;
+    public Project loadProject(FileObject directoryObj, ProjectState state) throws IOException {
+        return isProject(directoryObj) ? new PlayProject(directoryObj) : null;
     }
 
     @Override
     public void saveProject(final Project project) throws IOException, ClassCastException {
-        // leave unimplemented for the moment 
+        //NOTE: Not supported at the moment
     }
 
     @Override
-    public ProjectManager.Result isProject2(FileObject projectDirectory) {
-        if (isProject(projectDirectory)) {
-            return new ProjectManager.Result(IMAGE_ICON);
+    public ProjectManager.Result isProject2(FileObject directoryObj) {
+        if (isProject(directoryObj)) {
+            return new ProjectManager.Result(PROJECT_ICON);
         }
 
         return null;
