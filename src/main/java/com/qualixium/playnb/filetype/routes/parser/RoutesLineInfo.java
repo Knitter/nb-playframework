@@ -36,7 +36,7 @@ public class RoutesLineInfo {
      * @return
      */
     public boolean isCorrect() {
-        return isPathModifier() || (!httpMethod.isEmpty() && path.isEmpty() && action.isEmpty());
+        return isPathModifier() || (!httpMethod.isEmpty() && !path.isEmpty() && !action.isEmpty());
     }
 
     /**
