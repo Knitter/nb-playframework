@@ -49,7 +49,7 @@ public class RoutesParsingTest {
     public void validateGoodURL() {
         String url = "/employee/save";
 
-        List<RoutesParsingError> listErrors = RoutesValidator.validateURL(goodRoutesFileContent, "", url);
+        List<RoutesParsingError> listErrors = RoutesValidator.validatePath(goodRoutesFileContent, "", url);
 
         assertTrue(listErrors.isEmpty());
     }
@@ -58,7 +58,7 @@ public class RoutesParsingTest {
     public void validateURLStartIncorrect() {
         String url = "employee/save";
 
-        List<RoutesParsingError> listErrors = RoutesValidator.validateURL(goodRoutesFileContent, "", url);
+        List<RoutesParsingError> listErrors = RoutesValidator.validatePath(goodRoutesFileContent, "", url);
 
         boolean containsError = listErrors.stream()
                 .anyMatch(error -> error.getDisplayName().equals(RoutesErrorType.URL_START_INCORRECT_ERROR.description));

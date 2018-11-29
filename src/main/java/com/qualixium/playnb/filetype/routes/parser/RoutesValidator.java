@@ -34,7 +34,7 @@ public class RoutesValidator {
 
                         if (parsedLine.isCorrect()) {
                             listErrors.addAll(validateHttpMethod(fileContent, line, parsedLine.getHttMethod()));
-                            listErrors.addAll(validateURL(fileContent, line, parsedLine.getPath()));
+                            listErrors.addAll(validatePath(fileContent, line, parsedLine.getPath()));
                             listErrors.addAll(validateMethod(document, line, parsedLine.getAction()));
 
                         } else {
@@ -64,11 +64,9 @@ public class RoutesValidator {
         return errors;
     }
 
-    public static List<RoutesParsingError> validateURL(String fileContent, String line, String url) {
+    public static List<RoutesParsingError> validatePath(String fileContent, String line, String url) {
         List<RoutesParsingError> errors = new ArrayList<>();
-        boolean urlStartCorrect = url.startsWith(RoutesLanguageHelper.URL_START_SYMBOL);
-
-        if (!urlStartCorrect) {
+        if (!url.startsWith(RoutesLanguageHelper.URL_START_SYMBOL)) {
             int startPosition = MiscUtil.getStartPosition(fileContent, line, url);
             errors.add(new RoutesParsingError(RoutesErrorType.URL_START_INCORRECT_ERROR, Severity.ERROR, startPosition, startPosition + url.length()));
         }
@@ -78,41 +76,43 @@ public class RoutesValidator {
 
     private static List<RoutesParsingError> validateMethod(Document document, String line, String method) {
         List<RoutesParsingError> errors = new ArrayList<>();
-        boolean methodExists = false;
 
-        try {
-            String fileContent = document.getText(0, document.getLength());
-            Optional<RoutesParsingError> errorOptional = validateMethodStartWithInvalidCharacter(fileContent, line, method);
-            errorOptional.ifPresent(error -> errors.add(error));
-
-            String className = RoutesLanguageHelper.getOnlyClassNameFromCompleteMethodSignature(method);
-            if (className.contains("Assets")) {//if contains Assets should not be validated
-                methodExists = true;
-            } else {
-                String methodName = RoutesLanguageHelper.getOnlyMethodNameFromCompleteMethodSignature(method);
-                FileObject foDocument = MiscUtil.getFileObject(document);
-                ClassPath compileCp = ClassPath.getClassPath(foDocument, ClassPath.COMPILE);
-                Class<?> clazz;
-
-                try {
-                    clazz = compileCp.getClassLoader(true).loadClass(className);
-                    List<Method> listMethods = Arrays.asList(clazz.getDeclaredMethods());
-                    methodExists = listMethods.stream()
-                            .anyMatch(declaredMethod -> declaredMethod.getName().equals(methodName));
-                } catch (ClassNotFoundException ex) {
-                    //TODO: NEW LOG; CHECK IF VALID
-                    ExceptionManager.logException(ex);
-                }
-            }
-
-            if (!methodExists) {
-                int startPosition = MiscUtil.getStartPosition(fileContent, line, method);
-                errors.add(new RoutesParsingError(RoutesErrorType.METHOD_DOES_NOT_EXISTS, Severity.ERROR, startPosition, startPosition + method.length()));
-            }
-        } catch (BadLocationException ex) {
-            ExceptionManager.logException(ex);
-        }
-
+        //TODO: Failing to compile and detect valid code, probably due to classpath issues/changes in Play and project
+        //      settings.
+        //boolean methodExists = false;
+        //
+        //try {
+        //    String fileContent = document.getText(0, document.getLength());
+        //    Optional<RoutesParsingError> errorOptional = validateMethodStartWithInvalidCharacter(fileContent, line, method);
+        //    errorOptional.ifPresent(error -> errors.add(error));
+        //
+        //    String className = RoutesLanguageHelper.getOnlyClassNameFromCompleteMethodSignature(method);
+        //    if (className.contains("Assets")) {//if contains Assets should not be validated
+        //        methodExists = true;
+        //    } else {
+        //        String methodName = RoutesLanguageHelper.getOnlyMethodNameFromCompleteMethodSignature(method);
+        //        FileObject foDocument = MiscUtil.getFileObject(document);
+        //        ClassPath compileCp = ClassPath.getClassPath(foDocument, ClassPath.COMPILE);
+        //        Class<?> clazz;
+        //
+        //        try {
+        //            clazz = compileCp.getClassLoader(true).loadClass(className);
+        //            List<Method> listMethods = Arrays.asList(clazz.getDeclaredMethods());
+        //            methodExists = listMethods.stream()
+        //                    .anyMatch(declaredMethod -> declaredMethod.getName().equals(methodName));
+        //        } catch (ClassNotFoundException ex) {
+        //            //TODO: NEW LOG; CHECK IF VALID
+        //            ExceptionManager.logException(ex);
+        //        }
+        //    }
+        //
+        //    if (!methodExists) {
+        //        int startPosition = MiscUtil.getStartPosition(fileContent, line, method);
+        //        errors.add(new RoutesParsingError(RoutesErrorType.METHOD_DOES_NOT_EXISTS, Severity.ERROR, startPosition, startPosition + method.length()));
+        //    }
+        //} catch (BadLocationException ex) {
+        //    ExceptionManager.logException(ex);
+        //}
         return errors;
     }
 
