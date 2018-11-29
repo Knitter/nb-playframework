@@ -1,7 +1,7 @@
 package com.qualixium.playnb.unit.routes;
 
 import com.qualixium.playnb.filetype.routes.RoutesLanguageHelper;
-import com.qualixium.playnb.filetype.routes.parser.RoutesLineParsedDTO;
+import com.qualixium.playnb.filetype.routes.parser.RoutesLineInfo;
 import com.qualixium.playnb.util.MiscUtil;
 import java.io.IOException;
 import java.net.URI;
@@ -32,11 +32,11 @@ public class RoutesFormattingUnitTest {
         List<String> listLines = MiscUtil.getLinesFromFileContent(fileContentFormatted);
 
         listLines.stream().forEach(lineFormatted -> {
-            RoutesLineParsedDTO lineParsedDTO = RoutesLanguageHelper.divideLineInColumns(lineFormatted);
+            RoutesLineInfo lineParsedDTO = RoutesLanguageHelper.extractLineInfo(lineFormatted);
             if (lineParsedDTO.isCorrect()) {
-                int httpMethodLocation = lineFormatted.indexOf(lineParsedDTO.getVerb());
-                int urlLocation = lineFormatted.indexOf(lineParsedDTO.getUrl());
-                assertTrue(spacesBetweenParts >= urlLocation - (httpMethodLocation + lineParsedDTO.getVerb().length()));
+                int httpMethodLocation = lineFormatted.indexOf(lineParsedDTO.getHttMethod());
+                int urlLocation = lineFormatted.indexOf(lineParsedDTO.getPath());
+                assertTrue(spacesBetweenParts >= urlLocation - (httpMethodLocation + lineParsedDTO.getHttMethod().length()));
             }
         });
     }

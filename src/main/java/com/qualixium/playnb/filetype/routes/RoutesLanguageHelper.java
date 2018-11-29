@@ -1,12 +1,14 @@
 package com.qualixium.playnb.filetype.routes;
 
 import com.qualixium.playnb.PlayProject;
-import com.qualixium.playnb.filetype.routes.parser.RoutesLineParsedDTO;
+import com.qualixium.playnb.filetype.routes.parser.RoutesLineInfo;
 import com.qualixium.playnb.util.MiscUtil;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.openide.filesystems.FileObject;
@@ -16,9 +18,12 @@ public class RoutesLanguageHelper {
     public static final String COMMENT_SYMBOL = "#";
     public static final String URL_START_SYMBOL = "/";
 
+    public static final Pattern COMPILED_PATTERN_STANDARDLINE = Pattern.compile("^(GET|POST|HEAD|OPTIONS|PUT|DELETE|PATCH|->)\\s+(\\/[!#$&-;=?-\\[\\]_a-z~]*)\\s+(\\S+.+)$");
+    public static final Pattern COMPILED_PATTERN_ROUTE_MODIFIER = Pattern.compile("^(\\+[a-z]+)$");
+
     public static List<String> getHTTPVerbs() {
         List<String> verbs = new ArrayList<>();
-               
+
         verbs.add("GET");
         verbs.add("HEAD");
         verbs.add("POST");
@@ -30,62 +35,33 @@ public class RoutesLanguageHelper {
         return verbs;
     }
 
-    public static RoutesLineParsedDTO divideLineInColumns(String line) {
+    public static RoutesLineInfo extractLineInfo(String line) {
         line = line.trim();
-        StringBuilder httpMethod = new StringBuilder();
-        StringBuilder url = new StringBuilder();
-        StringBuilder method = new StringBuilder();
 
-        WorkFlowEnum workFlowEnum = WorkFlowEnum.HTTP_METHOD_STARTED;
-
-        char[] chars = line.toCharArray();
-        for (char ch : chars) {
-            switch (workFlowEnum) {
-                case HTTP_METHOD_STARTED:
-                    workFlowEnum = WorkFlowEnum.HTTP_METHOD_FINISHED;
-                    if (!Character.isWhitespace(ch)) {
-                        httpMethod.append(ch);
-                    }
-                    break;
-                case HTTP_METHOD_FINISHED:
-                    if (!Character.isWhitespace(ch)) {
-                        workFlowEnum = WorkFlowEnum.URL_STARTED;
-                        url.append(ch);
-                    }
-                    break;
-                case URL_STARTED:
-                    workFlowEnum = WorkFlowEnum.URL_FINISHED;
-                    if (!Character.isWhitespace(ch)) {
-                        url.append(ch);
-                    }
-                    break;
-                case URL_FINISHED:
-                    if (!Character.isWhitespace(ch)) {
-                        workFlowEnum = WorkFlowEnum.METHOD_STARTED;
-                        method.append(ch);
-                    }
-                    break;
-                case METHOD_STARTED:
-                    method.append(ch);
-                    break;
-                default:
-                    break;
-            }
+        Matcher matcher = COMPILED_PATTERN_STANDARDLINE.matcher(line);
+        if (matcher.matches()) {
+            return new RoutesLineInfo(matcher.group(1), matcher.group(2), matcher.group(3));
         }
 
-        return new RoutesLineParsedDTO(httpMethod.toString(), url.toString(), method.toString());
+        matcher = COMPILED_PATTERN_ROUTE_MODIFIER.matcher(line);
+        if (matcher.matches()) {
+            return new RoutesLineInfo(matcher.group());
+        }
+
+        return new RoutesLineInfo();
     }
 
     public static String formatFile(String fileContent, int spaces) {
+        //TODO: Not yet validated
         StringBuilder result = new StringBuilder();
         List<String> listAllLines = MiscUtil.getLinesFromFileContent(fileContent);
 
         Optional<Integer> maxLengthHTTPMethodOptional = listAllLines.stream()
                 .map(line -> {
-                    if (lineIsEnableToFormat(line)) {
-                        RoutesLineParsedDTO lineParsedDTO = divideLineInColumns(line);
+                    if (canFormatLine(line)) {
+                        RoutesLineInfo lineParsedDTO = extractLineInfo(line);
                         if (lineParsedDTO.isCorrect()) {
-                            return lineParsedDTO.getVerb().length();
+                            return lineParsedDTO.getHttMethod().length();
                         }
                     }
 
@@ -93,22 +69,24 @@ public class RoutesLanguageHelper {
                 })
                 .max(Integer::compare);
 
-        Optional<Integer> maxLengthURLOptional = getAllUrlsFromRoutesFile(fileContent)
-                .stream().map(url -> url.length()).max(Integer::compare);
+        Optional<Integer> maxLengthURLOptional = getAllPathsFromRoutesFile(fileContent)
+                .stream()
+                .map(url -> url.length())
+                .max(Integer::compare);
 
         if (maxLengthHTTPMethodOptional.isPresent() && maxLengthURLOptional.isPresent()) {
             listAllLines.stream()
                     .forEach(line -> {
-                        RoutesLineParsedDTO lineParsedDTO = divideLineInColumns(line);
+                        RoutesLineInfo lineParsedDTO = extractLineInfo(line);
 
-                        if (lineIsEnableToFormat(line) && lineParsedDTO.isCorrect()) {
+                        if (canFormatLine(line) && lineParsedDTO.isCorrect()) {
                             Integer maxLengthHTTPMethod = maxLengthHTTPMethodOptional.get();
                             Integer maxLenthURL = maxLengthURLOptional.get();
-                            result.append(lineParsedDTO.getVerb())
-                                    .append(MiscUtil.getAmountSeparatorChars(maxLengthHTTPMethod + spaces - lineParsedDTO.getVerb().length()))
-                                    .append(lineParsedDTO.getUrl())
-                                    .append(MiscUtil.getAmountSeparatorChars(maxLenthURL + spaces - lineParsedDTO.getUrl().length()))
-                                    .append(lineParsedDTO.getMethod());
+                            result.append(lineParsedDTO.getHttMethod())
+                                    .append(MiscUtil.getAmountSeparatorChars(maxLengthHTTPMethod + spaces - lineParsedDTO.getHttMethod().length()))
+                                    .append(lineParsedDTO.getPath())
+                                    .append(MiscUtil.getAmountSeparatorChars(maxLenthURL + spaces - lineParsedDTO.getPath().length()))
+                                    .append(lineParsedDTO.getAction());
                         } else {
                             result.append(line);
                         }
@@ -116,44 +94,36 @@ public class RoutesLanguageHelper {
                         result.append(MiscUtil.LINE_SEPARATOR);
                     });
 
-            return result.toString().substring(0, result.length() - 1); //substring to remove the last LINE_SEPARATOR
+            //substring to remove the last LINE_SEPARATOR
+            return result.toString().substring(0, result.length() - 1);
         }
 
         return fileContent;
     }
 
-    public static boolean lineIsEnableToFormat(String line) {
-        return !line.trim().isEmpty() && !line.trim().startsWith(COMMENT_SYMBOL);
+    public static boolean canFormatLine(String line) {
+        return !line.trim().isEmpty() && !line.trim().startsWith(COMMENT_SYMBOL) && !COMPILED_PATTERN_ROUTE_MODIFIER.matcher(line).matches();
     }
 
-    public static boolean lineIsEnableToAutoComplete(String line) {
-        return !line.trim().startsWith(COMMENT_SYMBOL);
+    public static boolean canAutocompleteLine(String line) {
+        return !line.trim().startsWith(COMMENT_SYMBOL) && !COMPILED_PATTERN_ROUTE_MODIFIER.matcher(line).matches();
     }
 
     public static boolean isWhiteSpaceCharacterAtIndex(String line, int indexAt) {
-        try {
-            return Character.isWhitespace(line.charAt(indexAt));
-        } catch (IndexOutOfBoundsException e) {
-            return false;
-        }
+        return line.length() > indexAt && Character.isWhitespace(line.charAt(indexAt));
     }
 
-    public static boolean isCharacterAtIndex(char theChar, String line, int indexAt) {
-        try {
-            return theChar == line.charAt(indexAt);
-        } catch (IndexOutOfBoundsException e) {
-            return false;
-        }
+    public static boolean isCharacterAtIndex(char aChar, String line, int indexAt) {
+        return line.length() > indexAt && aChar == line.charAt(indexAt);
     }
 
-    public static List<String> getAllUrlsFromRoutesFile(String fileContent) {
-        List<String> listAllLines = MiscUtil.getLinesFromFileContent(fileContent);
-        List<String> listUrls = listAllLines.stream()
+    public static List<String> getAllPathsFromRoutesFile(String fileContent) {
+        List<String> urls = MiscUtil.getLinesFromFileContent(fileContent).stream()
                 .map(line -> {
-                    if (lineIsEnableToFormat(line)) {
-                        RoutesLineParsedDTO lineParsedDTO = divideLineInColumns(line);
+                    if (canFormatLine(line)) {
+                        RoutesLineInfo lineParsedDTO = extractLineInfo(line);
                         if (lineParsedDTO.isCorrect()) {
-                            return lineParsedDTO.getUrl();
+                            return lineParsedDTO.getPath();
                         }
                     }
 
@@ -163,17 +133,16 @@ public class RoutesLanguageHelper {
                 .distinct()
                 .collect(Collectors.toList());
 
-        return listUrls;
+        return urls;
     }
 
-    public static List<String> getAllMethodsFromRoutesFile(String fileContent, boolean withRepeatedValues) {
-        List<String> listAllLines = MiscUtil.getLinesFromFileContent(fileContent);
-        Stream<String> filterStream = listAllLines.stream()
+    public static List<String> getAllActionsFromRoutesFile(String fileContent, boolean withRepeatedValues) {
+        Stream<String> filterStream = MiscUtil.getLinesFromFileContent(fileContent).stream()
                 .map(line -> {
-                    if (lineIsEnableToFormat(line)) {
-                        RoutesLineParsedDTO lineParsedDTO = divideLineInColumns(line);
+                    if (canFormatLine(line)) {
+                        RoutesLineInfo lineParsedDTO = extractLineInfo(line);
                         if (lineParsedDTO.isCorrect()) {
-                            return lineParsedDTO.getMethod();
+                            return lineParsedDTO.getAction();
                         }
                     }
 
@@ -181,20 +150,17 @@ public class RoutesLanguageHelper {
                 })
                 .filter(line -> line != null);
 
-        List<String> listUrls;
         if (withRepeatedValues) {
-            listUrls = filterStream.collect(Collectors.toList());
-        } else {
-            listUrls = filterStream.distinct().collect(Collectors.toList());
+            return filterStream.collect(Collectors.toList());
         }
 
-        return listUrls;
+        return filterStream.distinct().collect(Collectors.toList());
     }
 
-    public static Optional<String> getRouteMethod(String routesFileContent, int offset) {
-        List<String> listMethods = getAllMethodsFromRoutesFile(routesFileContent, true);
+    public static Optional<String> getRouteAction(String routesFileContent, int offset) {
+        List<String> actions = getAllActionsFromRoutesFile(routesFileContent, true);
 
-        return listMethods.stream()
+        return actions.stream()
                 .filter(method -> {
                     int indexStart = routesFileContent.indexOf(method);
                     int indexEnd = indexStart + method.length();
@@ -202,10 +168,11 @@ public class RoutesLanguageHelper {
                     return (offset >= indexStart && offset <= indexEnd);
                 })
                 .findFirst()
-                .map(method -> getOnlyClassAndMethodNameFromCompleteMethodSignature(method));
+                .map(action -> getOnlyClassAndMethodNameFromCompleteMethodSignature(action));
     }
 
     public static String getOnlyClassAndMethodNameFromCompleteMethodSignature(String completeMethodSignature) {
+        //TODO: Not yet validated, may not work on latest Play version
         if (completeMethodSignature.contains("(")) {
             return completeMethodSignature.substring(0, completeMethodSignature.indexOf("("));
         } else {
@@ -214,6 +181,7 @@ public class RoutesLanguageHelper {
     }
 
     public static String getOnlyClassNameFromCompleteMethodSignature(String completeSignatureMethod) {
+        //TODO: Not yet validated, may not work on latest Play version
         if (completeSignatureMethod.contains(".")) {
             String classWithMethodName = getOnlyClassAndMethodNameFromCompleteMethodSignature(completeSignatureMethod);
             return classWithMethodName.substring(0, classWithMethodName.lastIndexOf("."));
@@ -223,18 +191,13 @@ public class RoutesLanguageHelper {
     }
 
     public static String getOnlyMethodNameFromCompleteMethodSignature(String completeSignatureMethod) {
+        //TODO: Not yet validated, may not work on latest Play version
         String classWithMethodName = getOnlyClassAndMethodNameFromCompleteMethodSignature(completeSignatureMethod);
         return classWithMethodName.substring(classWithMethodName.lastIndexOf(".") + 1, classWithMethodName.length());
     }
 
-    public enum WorkFlowEnum {
-
-        HTTP_METHOD_STARTED, HTTP_METHOD_FINISHED,
-        URL_STARTED, URL_FINISHED,
-        METHOD_STARTED, METHOD_FINISHED
-    }
-
     public static List<String> getFullClassNamesFromSourceDir(PlayProject playProject) {
+        //TODO: Not yet validated, may not work on latest Play version
         List<String> listSourceFiles = new ArrayList<>();
         FileObject sourceDirFO = playProject.getProjectDirectory().getFileObject("app");
         Enumeration<? extends FileObject> childrens = sourceDirFO.getChildren(true);

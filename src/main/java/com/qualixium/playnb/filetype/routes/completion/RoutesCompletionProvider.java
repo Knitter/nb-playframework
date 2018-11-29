@@ -2,7 +2,7 @@ package com.qualixium.playnb.filetype.routes.completion;
 
 import com.qualixium.playnb.filetype.routes.RoutesLanguage;
 import com.qualixium.playnb.filetype.routes.RoutesLanguageHelper;
-import com.qualixium.playnb.filetype.routes.parser.RoutesLineParsedDTO;
+import com.qualixium.playnb.filetype.routes.parser.RoutesLineInfo;
 import com.qualixium.playnb.project.PlayProjectUtil;
 import com.qualixium.playnb.util.ExceptionManager;
 import com.qualixium.playnb.util.MiscUtil;
@@ -62,25 +62,25 @@ public class RoutesCompletionProvider implements CompletionProvider {
                         startOffset = lineStartOffset;
                     }
 
-                    if (RoutesLanguageHelper.lineIsEnableToAutoComplete(lineUntilcaret)) {
-                        RoutesLineParsedDTO lineParsedDTO = RoutesLanguageHelper.divideLineInColumns(lineUntilcaret);
+                    if (RoutesLanguageHelper.canAutocompleteLine(lineUntilcaret)) {
+                        RoutesLineInfo lineParsedDTO = RoutesLanguageHelper.extractLineInfo(lineUntilcaret);
                         if (lineUntilcaret.trim().isEmpty()
-                                || (!lineParsedDTO.getVerb().isEmpty()
-                                && !RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret, lineParsedDTO.getVerb().length()))) {
+                                || (!lineParsedDTO.getHttMethod().isEmpty()
+                                && !RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret, lineParsedDTO.getHttMethod().length()))) {
 
                             resolveHTTPMethodCompletion(filter, crs, startOffset, caretOffset);
-                        } else if ((!lineParsedDTO.getVerb().isEmpty()
-                                && RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret, lineParsedDTO.getVerb().length())
-                                && lineParsedDTO.getUrl().isEmpty())
-                                || (!lineParsedDTO.getUrl().isEmpty()
+                        } else if ((!lineParsedDTO.getHttMethod().isEmpty()
+                                && RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret, lineParsedDTO.getHttMethod().length())
+                                && lineParsedDTO.getPath().isEmpty())
+                                || (!lineParsedDTO.getPath().isEmpty()
                                 && !RoutesLanguageHelper.isWhiteSpaceCharacterAtIndex(lineUntilcaret,
-                                        lineUntilcaret.indexOf(lineParsedDTO.getUrl()) + lineParsedDTO.getUrl().length()))) {
+                                        lineUntilcaret.indexOf(lineParsedDTO.getPath()) + lineParsedDTO.getPath().length()))) {
 
                             resolveURLCompletion(fileContent, filter, crs, startOffset, caretOffset);
 
-                        } else if (!lineParsedDTO.getMethod().isEmpty()
-                                && lineParsedDTO.getMethod()
-                                        .substring(0, lineParsedDTO.getMethod().lastIndexOf(".") == -1 ? 0 : lineParsedDTO.getMethod().lastIndexOf("."))
+                        } else if (!lineParsedDTO.getAction().isEmpty()
+                                && lineParsedDTO.getAction()
+                                        .substring(0, lineParsedDTO.getAction().lastIndexOf(".") == -1 ? 0 : lineParsedDTO.getAction().lastIndexOf("."))
                                         .chars().anyMatch(ch -> Character.isUpperCase(ch))) {
 
                             resolveMethodCompletion(lineParsedDTO, dcmnt, crs, startOffset, caretOffset);
@@ -117,12 +117,12 @@ public class RoutesCompletionProvider implements CompletionProvider {
                 }
             }
 
-            private void resolveMethodCompletion(RoutesLineParsedDTO lineParsedDTO, Document dcmnt,
+            private void resolveMethodCompletion(RoutesLineInfo lineParsedDTO, Document dcmnt,
                     CompletionResultSet crs, int startOffset, int caretOffset)
                     throws IOException, SecurityException, ClassNotFoundException {
-                int lastDOTIndex = lineParsedDTO.getMethod().lastIndexOf(".");
-                String className = lineParsedDTO.getMethod().substring(0, lastDOTIndex);
-                final String filterForMethod = lineParsedDTO.getMethod().substring(lastDOTIndex + 1, lineParsedDTO.getMethod().length());
+                int lastDOTIndex = lineParsedDTO.getAction().lastIndexOf(".");
+                String className = lineParsedDTO.getAction().substring(0, lastDOTIndex);
+                final String filterForMethod = lineParsedDTO.getAction().substring(lastDOTIndex + 1, lineParsedDTO.getAction().length());
 
                 FileObject fo = MiscUtil.getFileObject(dcmnt);
                 ClassPath compileCp = ClassPath.getClassPath(fo, ClassPath.COMPILE);
@@ -151,7 +151,7 @@ public class RoutesCompletionProvider implements CompletionProvider {
             }
 
             private void resolveURLCompletion(String fileContent, String filter, CompletionResultSet crs, int startOffset, int caretOffset) {
-                RoutesLanguageHelper.getAllUrlsFromRoutesFile(fileContent).stream()
+                RoutesLanguageHelper.getAllPathsFromRoutesFile(fileContent).stream()
                         .filter((url) -> (url.toLowerCase().startsWith(filter.toLowerCase())))
                         .forEach((url) -> {
                             crs.addItem(new RoutesURLCompletionItem(url, startOffset, caretOffset));

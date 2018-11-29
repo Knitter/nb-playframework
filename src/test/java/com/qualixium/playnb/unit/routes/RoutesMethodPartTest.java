@@ -56,7 +56,7 @@ public class RoutesMethodPartTest {
     public void getMethodNameApplicationIndexTest() {
         int offset = 140;
 
-        Optional<String> methodNameOptional = RoutesLanguageHelper.getRouteMethod(routesFileContent, offset);
+        Optional<String> methodNameOptional = RoutesLanguageHelper.getRouteAction(routesFileContent, offset);
 
         //TODO: assertEquals("controllers.Application.index", methodNameOptional.get());
         assertTrue(true);
@@ -66,7 +66,7 @@ public class RoutesMethodPartTest {
     public void getMethodNameMainIndexTest() {
         int offset = 220;
 
-        Optional<String> methodNameOptional = RoutesLanguageHelper.getRouteMethod(routesFileContent, offset);
+        Optional<String> methodNameOptional = RoutesLanguageHelper.getRouteAction(routesFileContent, offset);
 
         //TODO: assertEquals("controllers.MainController.index", methodNameOptional.get());
         assertTrue(true);
@@ -76,7 +76,7 @@ public class RoutesMethodPartTest {
     public void thereIsNoMethodInOffetTest() {
         int offset = 49;
 
-        Optional<String> methodNameOptional = RoutesLanguageHelper.getRouteMethod(routesFileContent, offset);
+        Optional<String> methodNameOptional = RoutesLanguageHelper.getRouteAction(routesFileContent, offset);
 
         assertFalse(methodNameOptional.isPresent());
     }

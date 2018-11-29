@@ -97,7 +97,7 @@ public class RoutesHyperlinkProvider implements HyperlinkProviderExt {
     private int[] getIdentifierSpan(Document doc, int offset) {
         try {
             String routesFileContent = doc.getText(0, doc.getLength());
-            Optional<String> routeMethodOptional = RoutesLanguageHelper.getRouteMethod(routesFileContent, offset);
+            Optional<String> routeMethodOptional = RoutesLanguageHelper.getRouteAction(routesFileContent, offset);
 
             if (routeMethodOptional.isPresent()) {
                 String methodName = routeMethodOptional.get();

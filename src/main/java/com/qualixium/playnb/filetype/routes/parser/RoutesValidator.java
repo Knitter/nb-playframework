@@ -30,12 +30,12 @@ public class RoutesValidator {
                     .map(line -> line.trim())
                     .filter(line -> !line.isEmpty() && !line.startsWith(RoutesLanguageHelper.COMMENT_SYMBOL))
                     .forEach(line -> {
-                        RoutesLineParsedDTO parsedLine = RoutesLanguageHelper.divideLineInColumns(line);
+                        RoutesLineInfo parsedLine = RoutesLanguageHelper.extractLineInfo(line);
 
                         if (parsedLine.isCorrect()) {
-                            listErrors.addAll(validateHttpMethod(fileContent, line, parsedLine.getVerb()));
-                            listErrors.addAll(validateURL(fileContent, line, parsedLine.getUrl()));
-                            listErrors.addAll(validateMethod(document, line, parsedLine.getMethod()));
+                            listErrors.addAll(validateHttpMethod(fileContent, line, parsedLine.getHttMethod()));
+                            listErrors.addAll(validateURL(fileContent, line, parsedLine.getPath()));
+                            listErrors.addAll(validateMethod(document, line, parsedLine.getAction()));
 
                         } else {
                             int start = fileContent.indexOf(line);
