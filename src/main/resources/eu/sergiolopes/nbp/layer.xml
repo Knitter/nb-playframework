@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem> 
+    <folder name="Editors"> 
+        <folder name="text"> 
+            <folder name="x-sbt">
+                <attr name="displayName" bundlevalue="eu.sergiolopes.nbp.filetype.sbt.Bundle#Editors/text/x-sbt"/>
+                <folder name="FontsColors"> 
+                    <folder name="NetBeans"> 
+                        <folder name="Defaults"> 
+                            <file name="SBTFontAndColors.xml">
+                                <attr name="displayName" bundlevalue="eu.sergiolopes.nbp.filetype.sbt.Bundle#Editors/text/x-sbt/FontsColors/NetBeans/Defaults/SBTFontAndColors.xml"/>
+                            </file> 
+                        </folder> 
+                    </folder> 
+                </folder> 
+            </folder> 
+            <folder name="x-conf"> 
+                <attr name="displayName" bundlevalue="eu.sergiolopes.nbp.filetype.conf.Bundle#Editors/text/x-conf"/>
+                <folder name="FontsColors"> 
+                    <folder name="NetBeans"> 
+                        <folder name="Defaults"> 
+                            <file name="ConfFontAndColors.xml">
+                                <attr name="displayName" bundlevalue="eu.sergiolopes.nbp.filetype.conf.Bundle#Editors/text/x-conf/FontsColors/NetBeans/Defaults/ConfFontAndColors.xml"/>
+                            </file> 
+                        </folder> 
+                    </folder> 
+                </folder> 
+            </folder> 
+            <folder name="routes-file">  
+                <attr name="displayName" bundlevalue="eu.sergiolopes.nbp.filetype.routes.Bundle#Editors/text/routes-file"/>
+                <folder name="FontsColors"> 
+                    <folder name="NetBeans"> 
+                        <folder name="Defaults"> 
+                            <file name="RoutesFontAndColors.xml">
+                                <attr name="displayName" bundlevalue="eu.sergiolopes.nbp.filetype.routes.Bundle#Editors/text/routes-file/FontsColors/NetBeans/Defaults/RoutesFontAndColors.xml"/>
+                            </file> 
+                        </folder> 
+                    </folder> 
+                </folder> 
+            </folder> 
+            <folder name="x-scala-template">                  
+                <attr name="displayName" bundlevalue="eu.sergiolopes.nbp.filetype.scalatemplate.Bundle#Editors/text/x-scala-template"/>
+                <folder name="FontsColors"> 
+                    <folder name="NetBeans"> 
+                        <folder name="Defaults"> 
+                            <file name="ScalaTemplateFontAndColors.xml">
+                                <attr name="displayName" bundlevalue="eu.sergiolopes.nbp.filetype.scalatemplate.Bundle#Editors/text/x-scala-template/FontsColors/NetBeans/Defaults/ScalaTemplateFontAndColors.xml"/>
+                            </file> 
+                        </folder> 
+                    </folder> 
+                </folder> 
+            </folder> 
+        </folder> 
+    </folder> 
+    <folder name="OptionsDialog"> 
+        <folder name="PreviewExamples"> 
+            <folder name="text"> 
+                <file name="x-sbt" url="filetype/sbt/SBTTemplate.sbt"/> 
+                <file name="routes-file" url="filetype/routes/routes"/> 
+                <file name="x-scala-template" url="filetype/scalatemplate/ScalaTemplatePreview.scala.html"/> 
+            </folder> 
+        </folder> 
+    </folder>
+    <folder name="HTMLPalette"> 
+        <folder name="Play Framework Forms"> 
+            <file name="inputText.xml" url="filetype/scalatemplate/palette/inputText.xml"> 
+                <attr name="position" intvalue="1"/> 
+            </file>
+            <file name="checkbox.xml" url="filetype/scalatemplate/palette/checkbox.xml">
+                <attr name="position" intvalue="2"/> 
+            </file>
+            <file name="select.xml" url="filetype/scalatemplate/palette/select.xml">
+                <attr name="position" intvalue="3"/> 
+            </file>
+            <file name="textarea.xml" url="filetype/scalatemplate/palette/textarea.xml">
+                <attr name="position" intvalue="4"/> 
+            </file>
+            <file name="inputRadioGroup.xml" url="filetype/scalatemplate/palette/inputRadioGroup.xml">
+                <attr name="position" intvalue="5"/> 
+            </file>
+            <file name="inputDate.xml" url="filetype/scalatemplate/palette/inputDate.xml">
+                <attr name="position" intvalue="6"/> 
+            </file>
+            <file name="inputPassword.xml" url="filetype/scalatemplate/palette/inputPassword.xml">
+                <attr name="position" intvalue="7"/> 
+            </file>
+            <file name="inputFile.xml" url="filetype/scalatemplate/palette/inputFile.xml">
+                <attr name="position" intvalue="8"/> 
+            </file>
+        </folder> 
+    </folder>
+</filesystem>

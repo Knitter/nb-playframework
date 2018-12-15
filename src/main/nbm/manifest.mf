@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-OpenIDE-Module-Layer: com/qualixium/playnb/layer.xml
-OpenIDE-Module-Localizing-Bundle: com/qualixium/playnb/Bundle.properties
+OpenIDE-Module-Layer: eu/sergiolopes/nbp/layer.xml
+OpenIDE-Module-Localizing-Bundle: eu/sergiolopes/nbp/Bundle.properties
 
