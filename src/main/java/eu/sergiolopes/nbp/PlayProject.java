@@ -91,11 +91,11 @@ public class PlayProject implements Project {
     private final class Info implements ProjectInformation {
 
         @StaticResource()
-        public static final String PROJECT_ICON = "eu/sergiolopes/nbp/play_icon.png";
+        public static final String ICON = "eu/sergiolopes/nbp/play_icon.png";
 
         @Override
         public Icon getIcon() {
-            return new ImageIcon(ImageUtilities.loadImage(PROJECT_ICON));
+            return new ImageIcon(ImageUtilities.loadImage(ICON));
         }
 
         @Override
@@ -156,12 +156,9 @@ public class PlayProject implements Project {
 
             public ProjectNode(Node node, PlayProject project) throws DataObjectNotFoundException {
                 super(node,
-                        NodeFactorySupport.createCompositeChildren(
-                                project, "Projects/eu-sergiolopes-nbp/Nodes"),
-                        new ProxyLookup(
-                                new Lookup[]{
-                                    Lookups.singleton(project), node.getLookup()
-                                }));
+                        NodeFactorySupport.createCompositeChildren(project, "Projects/eu-sergiolopes-nbp/Nodes"),
+                        new ProxyLookup(new Lookup[]{Lookups.singleton(project), node.getLookup()})
+                );
 
                 this.project = project;
                 this.actionsProcessor = new ActionsProcessor(project);
@@ -200,7 +197,7 @@ public class PlayProject implements Project {
 
             @Override
             public Image getIcon(int type) {
-                return ImageUtilities.loadImage(Info.PROJECT_ICON);
+                return ImageUtilities.loadImage(Info.ICON);
             }
 
             @Override
@@ -322,7 +319,7 @@ public class PlayProject implements Project {
             try {
                 return NodeOp.findPath(start, path);
             } catch (NodeNotFoundException ex) {
-                // ignored
+                //TODO: Log exception or add validation to avoid it
             }
 
             return null;

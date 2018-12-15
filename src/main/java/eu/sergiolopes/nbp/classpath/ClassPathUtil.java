@@ -79,7 +79,7 @@ public class ClassPathUtil {
         } catch (IOException ex) {
             ExceptionManager.logException(ex);
         }
-    } 
+    }
 
     public static void executeEclipseCommandDELETED(PlayProject playProject) {
         try {

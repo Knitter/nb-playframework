@@ -23,10 +23,12 @@ import org.openide.util.Utilities;
 
 public class ClassPathProviderImpl implements ClassPathProvider {
 
-    private final PlayProject playProject;
     private ClassPath boot;
     private ClassPath compile;
     private ClassPath source;
+
+    private final PlayProject playProject;
+
     public ClassLoader classLoaderWithScalaLibrary;
 
     public ClassPathProviderImpl(PlayProject playProject) {
@@ -58,7 +60,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
 
             if (ClassPath.SOURCE.equals(type)) {
                 if (source == null) {
-                    setUpSourceClassPath();
+                    setupSourceClassPath();
                 }
 
                 return source;
@@ -68,7 +70,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
         return null;
     }
 
-    private void setUpSourceClassPath() {
+    private void setupSourceClassPath() {
         if (source != null) {
             GlobalPathRegistry.getDefault().unregister(ClassPath.SOURCE, new ClassPath[]{source});
         }
@@ -95,9 +97,9 @@ public class ClassPathProviderImpl implements ClassPathProvider {
                         }
 
                         return fileObject.toURL();
-                    } else {
-                        return null;
                     }
+
+                    return null;
                 })
                 .filter(url -> url != null)
                 .collect(Collectors.toList());
@@ -109,7 +111,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
         new Thread(() -> {
             //DELETED: ClassPathUtil.executeEclipseCommand(playProject);
             reloadCompileClassPath();
-            setUpSourceClassPath();
+            setupSourceClassPath();
         }).start();
     }
 
@@ -155,8 +157,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
 
                 if (maxScalaLibVersionOpt.isPresent()) {
                     String maxScalaLibVersion = maxScalaLibVersionOpt.get();
-                    String pathScalaLibraryFile = ivyCacheDir
-                            + "org.scala-lang/scala-library/jars/scala-library-" + maxScalaLibVersion + ".jar";
+                    String pathScalaLibraryFile = ivyCacheDir + "org.scala-lang/scala-library/jars/scala-library-" + maxScalaLibVersion + ".jar";
                     URL urlScalaLibrary = Utilities.toURI(new File(pathScalaLibraryFile)).toURL();
                     if (urlScalaLibrary != null) {
                         listUrlClassPath.add(urlScalaLibrary);
@@ -184,7 +185,7 @@ public class ClassPathProviderImpl implements ClassPathProvider {
             try {
                 GlobalPathRegistry.getDefault().unregister(ClassPath.COMPILE, new ClassPath[]{compile});
             } catch (IllegalArgumentException ex) {
-                //TODO: LOG!
+                //TODO: Log or avoid exception
             }
         }
 

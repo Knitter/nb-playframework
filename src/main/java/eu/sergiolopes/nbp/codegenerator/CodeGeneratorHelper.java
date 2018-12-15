@@ -8,19 +8,19 @@ public class CodeGeneratorHelper {
     public static final String TAB_SPACES = "    ";
 
     public static String getCodeNewMethodScala(String methodName) {
-        StringBuilder sbResult = new StringBuilder();
-        sbResult.append("def ")
+        StringBuilder builder = new StringBuilder();
+        builder.append("def ")
                 .append(methodName)
                 .append(" = TODO")
                 .append(MiscUtil.LINE_SEPARATOR);
 
-        return applySpaces(sbResult.toString());
+        return applySpaces(builder.toString());
     }
 
     public static String getCodeNewMethodJava(String methodName) {
-        StringBuilder sbResult = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-        sbResult.append("public Result ")
+        builder.append("public Result ")
                 .append(methodName)
                 .append("() {")
                 .append(MiscUtil.LINE_SEPARATOR)
@@ -28,7 +28,7 @@ public class CodeGeneratorHelper {
                 .append(MiscUtil.LINE_SEPARATOR)
                 .append("}");
 
-        return applySpaces(sbResult.toString());
+        return applySpaces(builder.toString());
     }
 
     public static String getFileContentWithNewMethodCode(String fileContent, String newMethodCode) {
