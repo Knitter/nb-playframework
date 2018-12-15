@@ -44,12 +44,13 @@ import org.openide.util.lookup.ProxyLookup;
 
 public class PlayProject implements Project {
 
-    private final FileObject projectDir;
     private Lookup lookup;
-    private final ClassPathProviderImpl classPathProviderImpl;
     private SBTDependenciesParentNode sbtDependenciesParentNode;
 
-    public static final String PLUGIN_NAME = "Pleasure";
+    private final FileObject projectDir;
+    private final ClassPathProviderImpl classPathProviderImpl;
+
+    public static final String PLUGIN_NAME = "NetBeans Play";
     public static final boolean IS_PRODUCTION = true;
 
     PlayProject(FileObject dir) {
